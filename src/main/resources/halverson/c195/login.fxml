@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="446.0" style="-fx-background-color: f0f0f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="546.0" prefWidth="446.0" style="-fx-background-color: f0f0f1;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.LoginController">
    <children>
       <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="234.0" layoutX="109.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="228.0" />
-      <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="47.0" layoutX="83.0" layoutY="488.0" stroke="BLACK" strokeType="INSIDE" width="281.0" />
-      <Text layoutX="170.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
+      <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="47.0" layoutX="19.0" layoutY="487.0" stroke="BLACK" strokeType="INSIDE" width="403.0" />
+      <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="47.0" layoutX="62.0" layoutY="30.0" stroke="BLACK" strokeType="INSIDE" width="322.0" />
+      <Text fx:id="loginLabel" layoutX="65.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login" textAlignment="CENTER" wrappingWidth="322.0322265625">
          <font>
             <Font name="Arial Black" size="33.0" />
          </font>
       </Text>
       <TextField fx:id="userNameField" layoutX="128.0" layoutY="238.0" prefHeight="25.0" prefWidth="190.0" />
-      <Text layoutX="173.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+      <Text fx:id="usernameLabel" layoutX="106.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER" wrappingWidth="228.0">
          <font>
             <Font name="Arial Black" size="18.0" />
          </font>
       </Text>
       <TextField fx:id="passwordField" layoutX="128.0" layoutY="318.0" prefHeight="25.0" prefWidth="190.0" />
-      <Text layoutX="175.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+      <Text fx:id="passwordLabel" layoutX="106.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" textAlignment="CENTER" wrappingWidth="228.0">
          <font>
             <Font name="Arial Black" size="18.0" />
          </font>
       </Text>
-      <Button layoutX="181.0" layoutY="363.0" mnemonicParsing="false" onAction="#OnLoginClick" prefHeight="25.0" prefWidth="83.0" text="Login" />
+      <Button fx:id="loginbuttonLabel" layoutX="160.0" layoutY="371.0" mnemonicParsing="false" onAction="#OnLoginClick" prefHeight="25.0" prefWidth="121.0" text="Login" textAlignment="CENTER" />
       <Label layoutX="209.0" layoutY="121.0" />
-      <Text layoutX="100.0" layoutY="517.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your location:">
+      <Text fx:id="yourlocationLabel" layoutY="517.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your location" textAlignment="CENTER" wrappingWidth="228.0">
          <font>
             <Font name="Arial Black" size="16.0" />
          </font>
       </Text>
-      <Label fx:id="locationLabel" layoutX="226.0" layoutY="499.0" text="Soviet Union">
+      <Label fx:id="locationLabel" layoutX="252.0" layoutY="499.0" text="United States">
          <font>
             <Font name="Arial Black" size="16.0" />
          </font>
       </Label>
-      <Line endX="124.0" layoutX="208.0" layoutY="79.0" startX="-100.0" />
    </children>
 </AnchorPane>
