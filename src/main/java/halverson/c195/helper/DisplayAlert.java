@@ -35,4 +35,11 @@ public class DisplayAlert {
         Optional<ButtonType> cannotDeleteResult = invalidData.showAndWait();
         return;
     }
+    public static void customError(String errorMessage){
+        Alert invalidData = new Alert(Alert.AlertType.ERROR,
+                errorMessage);
+
+        Optional<ButtonType> cannotDeleteResult = invalidData.showAndWait();
+        return;
+    }
 }
