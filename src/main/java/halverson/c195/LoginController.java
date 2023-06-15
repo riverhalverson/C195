@@ -105,7 +105,7 @@ public class LoginController implements Initializable {
                     System.out.print("Success");
                     Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
                     Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    Scene addProductsMenu = new Scene(root, 1300, 900);
+                    Scene addProductsMenu = new Scene(root, 1640, 900);
                     stage.setTitle("Add Product Menu");
                     stage.setScene(addProductsMenu);
                     stage.show();
