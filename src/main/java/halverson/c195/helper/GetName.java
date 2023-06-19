@@ -36,5 +36,19 @@ public class GetName {
 
         return contactName;
     }
+    public static String getDivisionName(int seekingID) throws SQLException {
+        String sql = "SELECT * FROM FIRST_LEVEL_DIVISIONS WHERE Division_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, seekingID);
+        ResultSet rs = ps.executeQuery();
+
+        String divisionName = "";
+
+        while(rs.next()){
+            divisionName = rs.getString("Division");
+        }
+
+        return divisionName;
+    }
 
 }

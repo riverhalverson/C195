@@ -47,18 +47,18 @@
             <Font size="15.0" />
          </font>
       </RadioButton>
-      <TableView fx:id="tableView" layoutX="18.0" layoutY="83.0" prefHeight="714.0" prefWidth="1607.0">
+      <TableView layoutX="18.0" layoutY="83.0" prefHeight="714.0" prefWidth="1607.0">
         <columns>
-          <TableColumn fx:id="Col1" prefWidth="106.0" text="Appointment ID" />
-          <TableColumn fx:id="Col2" prefWidth="84.0" text="Title" />
-            <TableColumn fx:id="Col3" prefWidth="257.0" text="Description" />
-            <TableColumn fx:id="Col4" prefWidth="135.0" text="Location" />
-            <TableColumn fx:id="Col5" prefWidth="202.0" text="Contact" />
-            <TableColumn fx:id="Col6" prefWidth="117.0" text="Type" />
-            <TableColumn fx:id="Col7" prefWidth="252.0" text="Start Date/Time" />
-            <TableColumn fx:id="Col8" prefWidth="248.0" text="End Date/Time" />
-            <TableColumn fx:id="Col9" prefWidth="105.0" text="Customer ID" />
-            <TableColumn fx:id="Col10" prefWidth="99.0" text="User ID" />
+          <TableColumn prefWidth="93.0" text="Appointment ID" />
+          <TableColumn prefWidth="97.0" text="Title" />
+            <TableColumn prefWidth="257.0" text="Description" />
+            <TableColumn prefWidth="135.0" text="Location" />
+            <TableColumn prefWidth="202.0" text="Contact" />
+            <TableColumn prefWidth="117.0" text="Type" />
+            <TableColumn prefWidth="252.0" text="Start Date/Time" />
+            <TableColumn prefWidth="248.0" text="End Date/Time" />
+            <TableColumn prefWidth="105.0" text="Customer ID" />
+            <TableColumn prefWidth="99.0" text="User ID" />
         </columns>
       </TableView>
    </children>

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class JDBC {
     private static final String protocol = "jdbc";
@@ -24,9 +26,9 @@ public abstract class JDBC {
             connection = DriverManager.getConnection(jdbcUrl, userName, password); // Reference Connection object
             System.out.println("Connection successful!");
         }
-        catch(Exception e)
+        catch(ClassNotFoundException | SQLException ex)
         {
-            System.out.println("Error:" + e.getMessage());
+            Logger.getLogger(JDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

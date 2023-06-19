@@ -34,5 +34,29 @@ public class GetId {
 
         return contactID;
     }
+    public static int getDivisionId(String division) throws SQLException {
+        String sql = "SELECT * FROM FIRST_LEVEL_DIVISIONS WHERE Division = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, division);
+        ResultSet rs = ps.executeQuery();
+
+        int userID = 0;
+
+        /*
+        while(rs.next()){
+            userID = rs.getInt("Division_ID");
+        }
+
+         */
+
+
+        if (rs.next()) {
+            do {
+                userID = rs.getInt("Division_ID");
+            } while (rs.next());
+        }
+
+        return userID;
+    }
 
 }

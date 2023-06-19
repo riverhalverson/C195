@@ -4,23 +4,21 @@ public class Customer {
     private int customerId;
     private String name;
     private String address;
-    private int postalCode;
-    private int phoneNumber;
-    private String stateProvince;
+    private String postalCode;
+    private String phoneNumber;
+    private int divisionId;
 
 
-    public Customer(int customerId, String name, String address, int postalCode, int phoneNumber, String stateProvince){
+    public Customer(int customerId, String name, String address, String postalCode, String phoneNumber, int divisionId){
         this.customerId = customerId;
         this.name = name;
         this.address = address;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
-        this.stateProvince = stateProvince;
+        this.divisionId = divisionId;
     }
 
-    public int getId(){
-        return customerId;
-    }
+    public int getId(){ return customerId; }
 
     public void setId(int id){
         this.customerId = id;
@@ -42,28 +40,26 @@ public class Customer {
         this.address = address;
     }
 
-    public int getPostalCode(){
-        return postalCode;
-    }
+    public String getPostalCode(){ return postalCode; }
 
-    public void setPostalCode(int postalCode){
+    public void setPostalCode(String postalCode){
         this.postalCode = postalCode;
     }
 
-    public int getPhoneNumber(){
+    public String getPhoneNumber(){
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber){
+    public void setPhoneNumber(String phoneNumber){
         this.phoneNumber = phoneNumber;
     }
 
-    public String getStateProvince(){
-        return stateProvince;
+    public int getDivisionId(){
+        return divisionId;
     }
 
-    public void setStateProvince(String stateProvince){
-        this.stateProvince = stateProvince;
+    public void setStateProvince(int divisionId){
+        this.divisionId = divisionId;
     }
 }
 

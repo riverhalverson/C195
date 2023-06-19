@@ -102,7 +102,7 @@ public class LoginController implements Initializable {
             //if user was found
             if (found) {
                 if (username.equals(queryUsername) && password.equals(queryPassword)) {
-                    System.out.print("Success");
+                    System.out.println("Success");
                     Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
                     Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     Scene addProductsMenu = new Scene(root, 1640, 900);
