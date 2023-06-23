@@ -78,9 +78,6 @@ public class AddCustomerController implements Initializable {
                     ResultSet.CONCUR_READ_ONLY);
             rs = statement.executeQuery(sql);
 
-            while(rs.next()){
-                System.out.println(rs.getString(1));
-            }
             rs.beforeFirst();
         }   catch (SQLException ex){
             ex.printStackTrace();
@@ -88,19 +85,16 @@ public class AddCustomerController implements Initializable {
         return rs;
     }
     public void OnAddCustomerSaveClick(ActionEvent actionEvent) throws SQLException, IOException {
-        //int customerId = getUniqueCustomerId();
         String name = AddCustomerNameField.getText();
         String address = AddCustomerAddressField.getText();
         String postalCode = AddCustomerPostalField.getText();
         String phoneNumber = AddCustomerPhoneField.getText();
 
 
-        int rowsAffected = insertCustomer(name, address, postalCode, phoneNumber, divisionId);
-        System.out.println(rowsAffected);
+        int rowsAffected = CustomerQuery.insertCustomer(name, address, postalCode, phoneNumber, divisionId);
 
 
         //display main menu
-        System.out.println("Success");
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene addProductsMenu = new Scene(root, 1640, 900);
@@ -126,52 +120,5 @@ public class AddCustomerController implements Initializable {
         division = AddCustomerDivisionsBox.getValue();
         divisionId = GetId.getDivisionId(division);
     }
-
-    public static int insertCustomer(String name, String address, String postalCode,
-                                     String phoneNumber, int divisionId ) throws SQLException {
-
-        String sql = "INSERT INTO CUSTOMERS  (Customer_Name, Address, Postal_Code, Phone, Create_Date, " +
-                "Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES" +
-                " (?, ?, ?, ?, NOW(), 'script', NOW(), 'script', ?)";
-
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, name);
-        ps.setString(2, address);
-        ps.setString(3, postalCode);
-        ps.setString(4, phoneNumber);
-        ps.setInt(5, divisionId);
-
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected;
-
-
-
-
-    }
-/*
-    public int getUniqueCustomerId() throws SQLException {
-        int userID = 0;
-        int uniqueId = 0;
-
-        String sql = "SELECT * FROM CUSTOMERS";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            do {
-                userID = rs.getInt("Customer_ID");
-                if(userID < uniqueId){
-                    return uniqueId;
-                }
-                else{
-                    uniqueId++;
-                }
-            } while (rs.next());
-        }
-        return uniqueId;
-
-    }
-
- */
 
 }

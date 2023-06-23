@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,14 +18,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainScreenController {
+public class MainScreenController implements Initializable {
     public RadioButton CustomersOption;
     public RadioButton WeeklyOption;
     public RadioButton MonthlyOption;
@@ -42,10 +47,11 @@ public class MainScreenController {
     public TableColumn Col8;
     public TableColumn Col9;
     public TableColumn Col10;
-    public TableView <CustomerRow> tableView;
-    private boolean customerSelected = false;
+    public TableView tableView;
+    private static boolean customerSelected = false;
 
     private static CustomerRow customer = null;
+    private static AppointmentRow appointment = null;
 
     public void OnExitClick(ActionEvent actionEvent) {
         System.out.println("Exited");
@@ -74,6 +80,7 @@ public class MainScreenController {
         customerSelected = false;
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
+        populateAppointmentTable();
     }
 
     public void OnMonthlyOptionClick(ActionEvent actionEvent) {
@@ -83,14 +90,17 @@ public class MainScreenController {
         customerSelected = false;
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
+        populateAppointmentTable();
     }
 
     public void OnAllOptionClick(ActionEvent actionEvent) {
         AddButton.setText("Add Appointment");
         UpdateButton.setText("Update Appointment");
         DeleteButton.setText("Delete Appointment");
+        customerSelected = false;
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
+        populateAppointmentTable();
     }
 
     public void OnAddClick(ActionEvent actionEvent) throws IOException {
@@ -102,9 +112,57 @@ public class MainScreenController {
             stage.setScene(addProductsMenu);
             stage.show();
         }
+        else{
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("AddAppt.fxml"));
+                loader.load();
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Parent scene = loader.getRoot();
+                stage.setTitle("Add Appointment");
+                stage.setScene(new Scene(scene));
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void OnDeleteClick(ActionEvent actionEvent) {
+    public void OnDeleteClick(ActionEvent actionEvent) throws SQLException {
+        if (customerSelected) {
+            customer = (CustomerRow) tableView.getSelectionModel().getSelectedItem();
+
+            //checks if no customer was selected, displays error
+            if (customer == null) {
+                Alert noSelectionError = new Alert(Alert.AlertType.ERROR, "No customer selected");
+
+                Optional<ButtonType> result = noSelectionError.showAndWait();
+            } else {
+                int customerid = customer.getCustomerid();
+                String customerName = customer.getCustomerName();
+
+                int rowsAffected = CustomerQuery.deleteCustomer(customerid);
+
+                //checks if delete was successful
+                if(rowsAffected == 0){
+                    Alert noSelectionError = new Alert(Alert.AlertType.ERROR,
+                            customerName + " was not deleted successfully");
+
+                    Optional<ButtonType> result = noSelectionError.showAndWait();
+                }
+                else{
+                    Alert noSelectionError = new Alert(Alert.AlertType.ERROR,
+                            customerName + " was deleted successfully");
+
+                    Optional<ButtonType> result = noSelectionError.showAndWait();
+
+                    //reloads customer table to show updates
+                    populateCustomerTable();
+                }
+            }
+        }
     }
 
     public void OnUpdateClick(ActionEvent actionEvent) throws IOException {
@@ -125,16 +183,36 @@ public class MainScreenController {
                     UpdateCustomerController ModifyController = loader.getController();
                     ModifyController.CustomerToModify(customer);
 
-                    System.out.println("To modify products table clicked");
                     Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     Parent scene = loader.getRoot();
-                    stage.setTitle("Modify Product Menu");
+                    stage.setTitle("Update Customer");
                     stage.setScene(new Scene(scene));
                     stage.show();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        }
+        else{
+            appointment = (AppointmentRow) tableView.getSelectionModel().getSelectedItem();
+
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("UpdateAppt.fxml"));
+                loader.load();
+
+                UpdateAppointmentController ModifyController = loader.getController();
+                ModifyController.AppointmentToModify(appointment);
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                Parent scene = loader.getRoot();
+                stage.setTitle("Update Appointment");
+                stage.setScene(new Scene(scene));
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -193,5 +271,62 @@ public class MainScreenController {
         Col8.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
         Col9.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
         Col10.setCellValueFactory(new PropertyValueFactory<>("division"));
+    }
+    public void populateAppointmentTable(){
+
+        tableView.getItems().clear();
+
+        ObservableList<AppointmentRow> apptList = FXCollections.observableArrayList();
+
+        ResultSet rs = null;
+
+        Statement stmt;
+        String sql = "SELECT * FROM APPOINTMENTS";
+
+        try{
+            stmt = JDBC.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                int appointmentid = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                int contactid = rs.getInt("Contact_ID");
+                String contact = GetName.getContactName(contactid);
+                String type = rs.getString("Type");
+                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+                int customerid = rs.getInt("Customer_ID");
+                int userid = rs.getInt("User_ID");
+
+                AppointmentRow ar = new AppointmentRow( appointmentid, title,
+                        description, location, contact, type, start,
+                        end, customerid, userid);
+
+                apptList.add(ar);
+            }
+
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        tableView.setItems(apptList);
+
+        Col1.setCellValueFactory(new PropertyValueFactory<>("appointmentid"));
+        Col2.setCellValueFactory(new PropertyValueFactory<>("title"));
+        Col3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        Col4.setCellValueFactory(new PropertyValueFactory<>("location"));
+        Col5.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        Col6.setCellValueFactory(new PropertyValueFactory<>("type"));
+        Col7.setCellValueFactory(new PropertyValueFactory<>("start"));
+        Col8.setCellValueFactory(new PropertyValueFactory<>("end"));
+        Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
+        Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        populateAppointmentTable();
+
     }
 }

@@ -42,13 +42,6 @@ public class GetId {
 
         int userID = 0;
 
-        /*
-        while(rs.next()){
-            userID = rs.getInt("Division_ID");
-        }
-
-         */
-
 
         if (rs.next()) {
             do {
@@ -58,5 +51,6 @@ public class GetId {
 
         return userID;
     }
+
 
 }
