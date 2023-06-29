@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 
 import java.time.LocalDateTime;
 
+/** This is the class for the appointment object in all of the tables */
 public class AppointmentRow {
     private IntegerProperty appointmentid;
     private StringProperty title;
@@ -19,6 +20,18 @@ public class AppointmentRow {
     private IntegerProperty customerid;
     private IntegerProperty userid;
 
+    /** This method creates a new appointment object
+     * @param appointmentid the appointment id
+     * @param title the title of the appointment
+     * @param description the description of the appointment
+     * @param location the location of the appointment
+     * @param contact the contact linked to the appointment
+     * @param type the type of appointment
+     * @param start the start date/time of the appointment
+     * @param end the end date/time of the appointment
+     * @param customerid the id of the customer linked to the appointment
+     * @param userid the id of the user linked to the appointment
+     */
     public AppointmentRow(int appointmentid, String title, String description, String location,
                           String contact, String type, LocalDateTime start, LocalDateTime end,
                           int customerid, int userid){
@@ -35,87 +48,88 @@ public class AppointmentRow {
         this.userid = new SimpleIntegerProperty(userid);
     }
 
+    /** This method is the appointment id property
+     * @return the appointment id property
+     */
     public IntegerProperty appointmentidProperty(){
         return appointmentid;
     }
     public final int getappointmentid(){
         return appointmentidProperty().get();
     }
-    public final void setappointmentid(int appointmentid){
-        appointmentidProperty().set(appointmentid);
-    }
+    /** This method is the appointment title property
+     * @return the appointment title property
+     */
     public StringProperty titleProperty(){
         return title;
     }
     public final String gettitle(){
         return titleProperty().get();
     }
-    public final void settitle(String title){
-        titleProperty().set(title);
-    }
+    /** This method is the appointment description property
+     * @return the appointment description property
+     */
     public StringProperty descriptionProperty(){
         return description;
     }
     public final String getdescription(){
         return descriptionProperty().get();
     }
-    public final void setdescription(String description){
-        descriptionProperty().set(description);
-    }
+    /** This method is the appointment location property
+     * @return the appointment location property
+     */
     public StringProperty locationProperty(){
         return location;
     }
     public final String getlocation(){
         return locationProperty().get();
     }
-    public final void setlocation(String location){
-        locationProperty().set(location);
-    }
+    /** This method is the appointment contact property
+     * @return the appointment contact property
+     */
     public StringProperty contactProperty(){
         return contact;
     }
     public final String getcontact(){
         return contactProperty().get();
     }
-    public final void setcontact(String contact){
-        contactProperty().set(contact);
-    }
+    /** This method is the appointment type property
+     * @return the appointment type property
+     */
     public StringProperty typeProperty(){
         return type;
     }
     public final String gettype(){
         return typeProperty().get();
     }
-    public final void settype(String type){
-        typeProperty().set(type);
-    }
+    /** This method is the appointment start date/time property
+     * @return the appointment start date/time
+     */
     public LocalDateTime getStart(){
         return start;
     }
+    /** This method is the appointment end date/time property
+     * @return the appointment end date/time
+     */
     public LocalDateTime getEnd(){
         return end;
     }
+    /** This method is the appointment customer id property
+     * @return the appointment customer id property
+     */
     public IntegerProperty customeridProperty(){
         return customerid;
     }
     public final int getcustomerid(){
         return customeridProperty().get();
     }
-    public final void setcustomerid(int customerid){
-        customeridProperty().set(customerid);
-    }
+    /** This method is the appointment user id property
+     * @return the appointment user id property
+     */
     public IntegerProperty useridProperty(){
         return userid;
     }
     public final int getuserid(){
         return useridProperty().get();
     }
-    public final void setuserid(int userid){
-        useridProperty().set(userid);
-    }
-
-
-
-
-
 }

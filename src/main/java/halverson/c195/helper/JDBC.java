@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+/** The JDBC class, this class initiates all database connections */
 public abstract class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -19,6 +19,7 @@ public abstract class JDBC {
     private static String password = "Passw0rd!"; // Password
     public static Connection connection;  // Connection Interface
 
+    /** This method starts the connection with the sql database */
     public static void openConnection()
     {
         try {
@@ -31,7 +32,7 @@ public abstract class JDBC {
             Logger.getLogger(JDBC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /** This method ends the connection with the sql database */
     public static void closeConnection() {
         try {
             connection.close();

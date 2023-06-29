@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/** This class is the controller for the update appointment page */
 public class UpdateAppointmentController implements Initializable {
     public TextField AppointmentIdField;
     public TextField TitleField;
@@ -39,6 +40,7 @@ public class UpdateAppointmentController implements Initializable {
     private LocalTime startTime;
     private LocalTime endTime;
 
+
     private AppointmentRow appointment = null;
 
     String title;
@@ -49,7 +51,7 @@ public class UpdateAppointmentController implements Initializable {
     int contactId;
     int userId;
 
-
+    /** This method populates the time boxes */
     public void createTimes(){
         LocalTime time = LocalTime.of(0,0);
 
@@ -61,6 +63,7 @@ public class UpdateAppointmentController implements Initializable {
             EndTimeComboBox.getItems().add(time);
         }
     }
+    /** This method populates the contact name selection box */
     private void contactComboBox(){
         ResultSet rs = runQuery("SELECT Contact_Name FROM CONTACTS");
         try{
@@ -71,6 +74,7 @@ public class UpdateAppointmentController implements Initializable {
             Logger.getLogger(AddCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /** This method populates the customer selection box */
     private void customerComboBox(){
         ResultSet rs = runQuery("SELECT Customer_ID FROM CUSTOMERS");
         try{
@@ -81,6 +85,7 @@ public class UpdateAppointmentController implements Initializable {
             Logger.getLogger(AddCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /** This method populates the user name selection box */
     private void userComboBox(){
         ResultSet rs = runQuery("SELECT USER_ID FROM USERS");
         try{
@@ -91,6 +96,7 @@ public class UpdateAppointmentController implements Initializable {
             Logger.getLogger(AddCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /** This method populates the type selection box */
     private void typeComboBox(){
         String planType = "Planning Session";
         String briefType = "De-Briefing";
@@ -102,7 +108,9 @@ public class UpdateAppointmentController implements Initializable {
     }
     public void DatePicked(ActionEvent actionEvent) {
     }
-
+    /** This method saves the entered information into the database, after doing invalid information checks
+     * @param actionEvent button pressed
+     */
     public void OnSaveClick(ActionEvent actionEvent) throws IOException, SQLException {
         String title = TitleField.getText();
         String description = DescriptionField.getText();
@@ -148,7 +156,9 @@ public class UpdateAppointmentController implements Initializable {
             stage.show();
         }
     }
-
+    /** This method returns the user to the main menu when exit is clicked
+     * @param actionEvent button pressed
+     */
     public void OnCancelClick(ActionEvent actionEvent) {
         createTimes();
 
@@ -167,14 +177,22 @@ public class UpdateAppointmentController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    /** This method gets the selected start time
+     * @param actionEvent the combobox is selected
+     */
     public void OnStartTimeSelect(ActionEvent actionEvent) {
         startTime = (LocalTime) StartTimeComboBox.getValue();
     }
-
+    /** This method gets the selected start time
+     * @param actionEvent the combobox is selected
+     */
     public void OnEndTimeSelect(ActionEvent actionEvent) {
         endTime = (LocalTime) EndTimeComboBox.getValue();
     }
+    /** This method runs a query with a given sql statement
+     * @param sql the query line to be run
+     * @return rs the resultset from the query
+     */
     private ResultSet runQuery(String sql) {
         ResultSet rs = null;
 
@@ -189,6 +207,9 @@ public class UpdateAppointmentController implements Initializable {
         }
         return rs;
     }
+    /** This method brings in the main menus selected appointment to modify and preloads the fields/combo boxes
+     * @param aptToModify the appointment to modify
+     */
     public void AppointmentToModify(AppointmentRow aptToModify) throws SQLException {
         appointment = aptToModify;
 
@@ -218,6 +239,12 @@ public class UpdateAppointmentController implements Initializable {
         startTime = (LocalTime) StartTimeComboBox.getValue();
         endTime = (LocalTime) EndTimeComboBox.getValue();
     }
+    /** This method checks for apt time overlaps
+     * @param start the start apt time
+     * @param end the end apt time
+     * @param customerId the customer id to check overlaps for
+     * @return true or false if there is an overlap
+     */
     public boolean checkOverlap(LocalDateTime start, LocalDateTime end, int customerId) throws SQLException {
         boolean overlap = false;
 
@@ -252,7 +279,11 @@ public class UpdateAppointmentController implements Initializable {
         }
         return overlap;
     }
-
+    /** This method checks if an appt is during working hours
+     * @param start the start apt time
+     * @param end the end apt time
+     * @return true or false if outside hours
+     */
     public boolean duringWorkingHours(LocalDateTime start, LocalDateTime end){
         boolean withinHours;
         LocalTime openHour = LocalTime.of(8,00);

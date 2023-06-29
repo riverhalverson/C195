@@ -27,6 +27,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/** This class is the controller for the add customer window */
 public class AddCustomerController implements Initializable {
 
     public TextField AddCustomerNameField;
@@ -43,6 +44,7 @@ public class AddCustomerController implements Initializable {
         CountryComboBox();
     }
 
+    /** This method populates the country combo box */
     private void CountryComboBox(){
         ResultSet rs = runQuery("SELECT Country FROM COUNTRIES");
         try{
@@ -54,6 +56,7 @@ public class AddCustomerController implements Initializable {
         }
     }
 
+    /** This method populates division combo box */
     private void DivisionComboBox() throws SQLException {
         String country = AddCustomerCountriesBox.getValue();
         System.out.println(country);
@@ -74,7 +77,10 @@ public class AddCustomerController implements Initializable {
         }
 
     }
-
+    /** This method runs query on the database
+     * @param sql the sql query to run
+     * @return rs resultset of the query that was ran
+     */
     public ResultSet runQuery(String sql){
         ResultSet rs = null;
 
@@ -89,6 +95,10 @@ public class AddCustomerController implements Initializable {
         }
         return rs;
     }
+
+    /** This method saves the entered information to the customer table
+     * @param actionEvent the save button is clicked
+     */
     public void OnAddCustomerSaveClick(ActionEvent actionEvent) throws SQLException, IOException {
         String name = AddCustomerNameField.getText();
         String address = AddCustomerAddressField.getText();
@@ -112,7 +122,6 @@ public class AddCustomerController implements Initializable {
             throw new RuntimeException("Phone number field cannot be blank");
         }
 
-
         int rowsAffected = CustomerQuery.insertCustomer(name, address, postalCode, phoneNumber, divisionId);
         //display main menu
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
@@ -123,6 +132,9 @@ public class AddCustomerController implements Initializable {
         stage.show();
     }
 
+    /** This method returns the user to the main menu
+     * @param actionEvent the exit button is clicked
+     */
     public void OnCancelAddCustomerClick(ActionEvent actionEvent) throws SQLException, IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -132,10 +144,16 @@ public class AddCustomerController implements Initializable {
         stage.show();
     }
 
+    /** This method gets the selected country from the combo box
+     * @param actionEvent the selection is made with the combo box
+     */
     public void OnCountrySelect(ActionEvent actionEvent) throws SQLException {
         DivisionComboBox();
     }
 
+    /** This method gets the selected division
+     * @param actionEvent the selection is made with the combo box
+     */
     public void OnDivisionSelect(ActionEvent actionEvent) throws SQLException {
         division = AddCustomerDivisionsBox.getValue();
         divisionId = GetId.getDivisionId(division);

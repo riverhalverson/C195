@@ -1,9 +1,20 @@
 package halverson.c195;
 
 import javafx.scene.control.TableColumn;
-
+/** This class is to hold the method that sets up the customer tableview */
 public class CustomerTable {
-
+    /** This method sets up the main tableview for the customers to be displayed
+     * @param Col1 column 1
+     * @param Col2 column 2
+     * @param Col3 column 3
+     * @param Col4 column 4
+     * @param Col5 column 5
+     * @param Col6 column 6
+     * @param Col7 column 7
+     * @param Col8 column 8
+     * @param Col9 column 9
+     * @param Col10 column 10
+     */
     public static void setupCustomerTable(TableColumn Col1, TableColumn Col2, TableColumn Col3,
                                           TableColumn Col4, TableColumn Col5, TableColumn Col6,
                                           TableColumn Col7, TableColumn Col8, TableColumn Col9,

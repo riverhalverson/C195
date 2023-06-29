@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/** This class is the controller for the reports window */
 public class ReportsController implements Initializable {
     public TableColumn IDCol;
     public TableColumn TitleCol;
@@ -53,12 +54,16 @@ public class ReportsController implements Initializable {
     String contact = "";
     String month;
 
+     /** This method gets the selected contact to filter the tableview by
+     * @param actionEvent the contact combo box selection is made
+     */
     public void OnSelectContact(ActionEvent actionEvent) throws SQLException {
         contact = (String) ContactComboBox.getValue();
         int contactId = GetId.getContactId(contact);
 
         populateAppointmentTable(contactId);
     }
+    /** This method populates the contact combo box with contacts from the database */
     private void contactComboBox(){
         ResultSet rs = runQuery("SELECT Contact_Name FROM CONTACTS");
         try{
@@ -69,6 +74,10 @@ public class ReportsController implements Initializable {
             Logger.getLogger(AddCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     /** This method runs a query on the database with a given statement
+     * @param sql the statement to run a query with
+     * @return the resultset from the query
+     */
     public ResultSet runQuery(String sql){
         ResultSet rs = null;
 
@@ -83,6 +92,12 @@ public class ReportsController implements Initializable {
         }
         return rs;
     }
+     /** This method populates the appointment table and filters by contact selected
+     * LAMBDA this is one of the lambda expressions I used in this program, it calls the same function used in the
+     * main screen tableview but this time filters it by contact. The amount of code written to change the filter
+     * criteria is far shorter than if I didn't use a lambda
+     * @param contactId the contact to sort the table by
+     */
     public void populateAppointmentTable(int contactId) throws SQLException {
         try {
             ObservableList<AppointmentRow> list = AppointmentsQuery.get().stream()
@@ -93,62 +108,10 @@ public class ReportsController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
-//        AppointmentContactsTable.getItems().clear();
-//
-//        ObservableList<AppointmentRow> apptList = FXCollections.observableArrayList();
-//        ResultSet rs = null;
-//
-//        String sql = "SELECT * FROM APPOINTMENTS WHERE Contact_ID = ?";
-//
-//        try{
-//            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-//            ps.setInt(1, contactId);
-//            rs = ps.executeQuery();
-//
-//            while(rs.next()){
-//                int appointmentid = rs.getInt("Appointment_ID");
-//                String title = rs.getString("Title");
-//                String description = rs.getString("Description");
-//                String location = rs.getString("Location");
-//                int contactid = rs.getInt("Contact_ID");
-//                String contact = GetName.getContactName(contactid);
-//                String type = rs.getString("Type");
-//                LocalDateTime startUtc = rs.getTimestamp("Start").toLocalDateTime();
-//
-//                LocalDateTime endUtc = rs.getTimestamp("End").toLocalDateTime();
-//
-//                //convert times to user times
-//                LocalDateTime start = TZConvert.UTCToUser(startUtc).toLocalDateTime();
-//
-//                LocalDateTime end = TZConvert.UTCToUser(endUtc).toLocalDateTime();
-//
-//                int customerid = rs.getInt("Customer_ID");
-//                int userid = rs.getInt("User_ID");
-//
-//                AppointmentRow ar = new AppointmentRow( appointmentid, title,
-//                        description, location, contact, type, start,
-//                        end, customerid, userid);
-//
-//                apptList.add(ar);
-//            }
-//
-//        }catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        AppointmentContactsTable.setItems(apptList);
-//
-//        IDCol.setCellValueFactory(new PropertyValueFactory<>("appointmentid"));
-//        TitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-//        DescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-//        LocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-//        TypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-//        StartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-//        EndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
-//        CustomerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerid"));
     }
+     /** This method populates the sum appointments by month table, and allows to sort by type selected
+     * @param type the type to sort by
+     */
     public void populateMonthlyAppointmentTable(String type) throws SQLException {
         AppointmentMonthTable.getItems().clear();
 
@@ -207,6 +170,7 @@ public class ReportsController implements Initializable {
         MonthAppointmentCol.setCellValueFactory(new PropertyValueFactory<>("month"));
         MonthNumberCol.setCellValueFactory(new PropertyValueFactory<>("count"));
     }
+     /** This method populates the sum appointments by country table */
     public void populateCountrySumTable() throws SQLException {
 
         AppointmentCountryTable.getItems().clear();
@@ -290,7 +254,9 @@ public class ReportsController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+     /** This method returns the user to the main screen
+     * @param actionEvent the exit button is pressed
+     */
     public void OnExit(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -299,12 +265,15 @@ public class ReportsController implements Initializable {
         stage.setScene(addProductsMenu);
         stage.show();
     }
-
+     /** This method takes the users selection of type to sort the table by
+     * @param actionEvent the combo box selection is made
+     */
     public void OnSelectType(ActionEvent actionEvent) throws SQLException {
         month = (String) TypeComboBox.getValue();
 
         populateMonthlyAppointmentTable(month);
     }
+    /** This method populates the type combo box with unique types from the database options */
     private void typeComboBox(){
         String planType = "Planning Session";
         String briefType = "De-Briefing";

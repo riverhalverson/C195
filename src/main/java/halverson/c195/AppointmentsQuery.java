@@ -8,8 +8,21 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-
+/** This class performs all the insert, update and delete database operations with the appointment objects*/
 public class AppointmentsQuery {
+
+    /** This method inserts an appointment object into the sql database
+     * @param title the title of the apt
+     * @param description the description of the apt
+     * @param location the location of the apt
+     * @param type the type of apt
+     * @param start the apt start timestamp
+     * @param end the apt end timestamp
+     * @param customerId the customer id
+     * @param contactId the contact id
+     * @param userId the user id
+     * @return rowsAffected the number of affected rows, if 0 then no insert performed, if 1 then it was successful
+     */
     public static int insertAppointment(String title, String description, String location,
                                      String type, Timestamp start, Timestamp end,
                                         int customerId, int contactId, int userId) throws SQLException {
@@ -32,6 +45,18 @@ public class AppointmentsQuery {
         int rowsAffected = ps.executeUpdate();
         return rowsAffected;
     }
+    /** This method updates an appointment object into the sql database
+     * @param title the title of the apt
+     * @param description the description of the apt
+     * @param location the location of the apt
+     * @param type the type of apt
+     * @param start the apt start timestamp
+     * @param end the apt end timestamp
+     * @param customerId the customer id
+     * @param contactId the contact id
+     * @param userId the user id
+     * @return rowsAffected the number of affected rows, if 0 then no update performed, if 1 then it was successful
+     */
     public static int updateAppointment(int appointmentId, String title, String description, String location,
                                         String type, Timestamp start, Timestamp end,
                                         int customerId, int contactId, int userId) throws SQLException {
@@ -54,6 +79,9 @@ public class AppointmentsQuery {
         int rowsAffected = ps.executeUpdate();
         return rowsAffected;
     }
+    /** This method allows for a lamda expression to run a query on the database
+     * @return an observable list of the sql query results
+     */
     public static ObservableList<AppointmentRow> get(){
         ObservableList<AppointmentRow> list = FXCollections.observableArrayList();
 
@@ -96,6 +124,10 @@ public class AppointmentsQuery {
         }
         return list;
     }
+    /** This method deletes an appointment object from the sql database
+     * @param appointmentId the id of the appointment to be deleted
+     * @return rowsAffected the number of affected rows, if 0 then no delete performed, if 1 then it was successful
+     */
     public static int deleteAppointment(int appointmentId) throws SQLException {
         String sql = "DELETE FROM APPOINTMENTS WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -104,6 +136,4 @@ public class AppointmentsQuery {
         int rowsAffected = ps.executeUpdate();
         return rowsAffected;
     }
-
-
 }

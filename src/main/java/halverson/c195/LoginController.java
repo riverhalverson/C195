@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/** This class is the controller for the login window */
 public class LoginController implements Initializable {
     public TextField userNameField;
     public TextField passwordField;
@@ -61,6 +62,9 @@ public class LoginController implements Initializable {
         locationLabel.setText(country);
     }
 
+    /** This method checks the users credentials and continues them to the main screen if matching
+     * @param actionEvent the login button is clicked
+     */
     public void OnLoginClick(ActionEvent actionEvent) throws SQLException, IOException {
         boolean found = true;
         String username = "";

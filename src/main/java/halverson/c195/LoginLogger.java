@@ -11,11 +11,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-
+/** This class is for the login page logger, it tracks successful and unsuccessful attempts and writes to a file */
 public class LoginLogger{
+    /** This method deletes an appointment object from the sql database
+     * @param loginResult the login result, successful or not
+     */
     public static void log(boolean loginResult){
         Logger log = Logger.getLogger("loginlog.txt");
 
+        //create new file if doesnt exist
         try{
             FileHandler fileHandler = new FileHandler("loginlog.txt", true);
             SimpleFormatter simpleFormat = new SimpleFormatter();
@@ -28,6 +32,7 @@ public class LoginLogger{
 
         log.setLevel(Level.INFO);
 
+        //sucessful attempt
         if(loginResult = true){
             LocalDate currentDate = LocalDate.now();
             LocalTime timestamp = LocalDateTime.now().toLocalTime();
@@ -44,5 +49,4 @@ public class LoginLogger{
 
         }
     }
-
 }

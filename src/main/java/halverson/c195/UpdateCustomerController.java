@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/** This class is the controller for the update customer window */
 public class UpdateCustomerController implements Initializable {
     public TextField UpdateCustomerNameField;
     public TextField UpdateCustomerAddressField;
@@ -47,7 +48,7 @@ public class UpdateCustomerController implements Initializable {
         CountryComboBox();
 
     }
-
+    /** This method populates the country combo box */
     private void CountryComboBox(){
         ResultSet rs = runQuery("SELECT Country FROM COUNTRIES");
         try{
@@ -58,7 +59,7 @@ public class UpdateCustomerController implements Initializable {
             Logger.getLogger(AddCustomerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    /** This method populates division combo box */
     private void DivisionComboBox() throws SQLException {
         String country = UpdateCustomerCountriesBox.getValue();
         System.out.println(country);
@@ -79,7 +80,10 @@ public class UpdateCustomerController implements Initializable {
         }
 
     }
-
+    /** This method runs query on the database
+     * @param sql the sql query to run
+     * @return rs resultset of the query that was ran
+     */
     private ResultSet runQuery(String sql) {
         ResultSet rs = null;
 
@@ -94,7 +98,9 @@ public class UpdateCustomerController implements Initializable {
         }
         return rs;
     }
-
+    /** This method brings in the main menus selected customer to modify and preloads the fields/combo boxes
+     * @param customerToModify the customer to be modified
+     */
     public void CustomerToModify(CustomerRow customerToModify) throws SQLException {
         customer = customerToModify;
 
@@ -127,15 +133,22 @@ public class UpdateCustomerController implements Initializable {
             }
         }
     }
+    /** This method gets the selected country from the combo box
+     * @param actionEvent the selection is made with the combo box
+     */
     public void OnCountrySelect(ActionEvent actionEvent) throws SQLException {
         DivisionComboBox();
     }
-
+    /** This method gets the selected division
+     * @param actionEvent the selection is made with the combo box
+     */
     public void OnDivisionSelect(ActionEvent actionEvent) throws SQLException {
         division = UpdateCustomerDivisionsBox.getValue();
         divisionId = GetId.getDivisionId(division);
     }
-
+    /** This method updates the entered information to the customer table
+     * @param actionEvent the save button is clicked
+     */
     public void OnUpdateCustomerSaveClick(ActionEvent actionEvent) throws SQLException, IOException {
         customerid = customer.getCustomerid();
         name = UpdateCustomerNameField.getText();
@@ -154,7 +167,9 @@ public class UpdateCustomerController implements Initializable {
         stage.setScene(addProductsMenu);
         stage.show();
     }
-
+    /** This method returns the user to the main menu
+     * @param actionEvent the exit button is clicked
+     */
     public void OnCancelUpdateCustomerClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

@@ -1,18 +1,24 @@
-Jun 28, 2023 9:47:11 AM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:09:47:11.290175800
+Jun 29, 2023 6:28:27 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:06:28:27.772961400
 
-Jun 28, 2023 9:47:51 AM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:09:47:51.980484
+Jun 29, 2023 6:33:05 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:06:33:05.500104200
 
-Jun 28, 2023 7:03:15 PM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:19:03:15.233082200
+Jun 29, 2023 6:39:35 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:06:39:35.228794100
 
-Jun 28, 2023 7:28:46 PM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:19:28:46.083272400
+Jun 29, 2023 6:44:47 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:06:44:47.020538100
 
-Jun 28, 2023 7:59:40 PM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:19:59:40.863588600
+Jun 29, 2023 9:21:01 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:09:21:01.351104200
 
-Jun 28, 2023 8:09:35 PM halverson.c195.LoginLogger log
-INFO: Successful login | Date:2023-06-28 | Time:20:09:35.366482400
+Jun 29, 2023 9:25:41 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:09:25:41.501455200
+
+Jun 29, 2023 9:27:34 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:09:27:34.566012400
+
+Jun 29, 2023 9:28:25 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-29 | Time:09:28:25.224826100
 

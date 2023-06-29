@@ -18,7 +18,6 @@
       <Button fx:id="UpdateButton" layoutX="179.0" layoutY="39.0" mnemonicParsing="false" onAction="#OnUpdateClick" prefHeight="25.0" prefWidth="133.0" text="Update Appointment" />
       <Button layoutX="1492.0" layoutY="39.0" mnemonicParsing="false" onAction="#OnExitClick" prefHeight="25.0" prefWidth="133.0" text="Exit" />
       <Button layoutX="1330.0" layoutY="39.0" mnemonicParsing="false" onAction="#OnReportsClick" prefHeight="25.0" prefWidth="133.0" text="Reports" />
-      <TextField alignment="CENTER" layoutX="1157.0" layoutY="40.0" prefHeight="25.0" prefWidth="143.0" promptText="Search" />
       <RadioButton fx:id="CustomersOption" layoutX="508.0" layoutY="830.0" mnemonicParsing="false" onAction="#OnCustomerOptionClick" prefHeight="21.0" prefWidth="105.0" text="Customers">
          <font>
             <Font size="15.0" />

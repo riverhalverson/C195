@@ -7,7 +7,17 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/** This class runs query on the customer table */
 public class CustomerQuery {
+
+    /** This method inserts a customer into the customer table
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postalCode the postal code of the customer
+     * @param phoneNumber the phone number of the customer
+     * @param divisionId the division id of the cusotomer
+     * @return rowsAffected the number of affected rows, if 0 then no insert performed, if 1 then it was successful
+     */
     public static int insertCustomer(String name, String address, String postalCode,
                                      String phoneNumber, int divisionId ) throws SQLException {
 
@@ -28,6 +38,14 @@ public class CustomerQuery {
         return rowsAffected;
     }
 
+    /** This method updates a customer in the customer table
+     * @param name the name of the customer
+     * @param address the address of the customer
+     * @param postalCode the postal code of the customer
+     * @param phoneNumber the phone number of the customer
+     * @param divisionId the division id of the cusotomer
+     * @return rowsAffected the number of affected rows, if 0 then no update performed, if 1 then it was successful
+     */
     public static int updateCustomer(int customerid, String name, String address, String postalCode,
                                      String phoneNumber, int divisionId) throws SQLException{
 
@@ -47,6 +65,10 @@ public class CustomerQuery {
         return rowsAffected;
     }
 
+    /** This method deletes a customer from the customer table
+     * @param customerid the name of the customer
+     * @return rowsAffected the number of affected rows, if 0 then no delete performed, if 1 then it was successful
+     */
     public static int deleteCustomer(int customerid) throws SQLException {
         String sql = "DELETE FROM CUSTOMERS WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);

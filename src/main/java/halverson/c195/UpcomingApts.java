@@ -6,7 +6,6 @@ import halverson.c195.helper.JDBC;
 import halverson.c195.helper.TZConvert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +13,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
+/** This class checks the database for upcoming appointments to alert the user about */
 public class UpcomingApts {
 
+     /** This method checks the database for appointments within 15 minutes of the users local time for the user id, and
+      * alerts them accordingly
+     * @param userId the user id to check for appointments for
+     */
     public static void checkApts(int userId) throws SQLException {
         ObservableList<AppointmentRow> apts = FXCollections.observableArrayList();
         ObservableList<String> matchingApts = FXCollections.observableArrayList();

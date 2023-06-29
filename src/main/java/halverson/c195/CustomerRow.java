@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+/** This class is the customer object used to populate the tables within the program */
 public class CustomerRow {
     private IntegerProperty customerid;
     private StringProperty customerName;
@@ -17,6 +18,18 @@ public class CustomerRow {
     private StringProperty lastUpdatedBy;
     private StringProperty division;
 
+    /** This method creates a new customer object
+     * @param customerName the name of the customer
+     * @param customerid the id of the customer
+     * @param address the address of the customer
+     * @param postalCode the postal code of the customer
+     * @param phoneNumber the phone number of the customer
+     * @param createdBy who created the customer record
+     * @param createDate the created date of the customer record
+     * @param lastUpdate the last updated date of the customer record
+     * @param lastUpdatedBy who last updated the customer record
+     * @param division the division id of the customer
+     */
     public CustomerRow(int customerid, String customerName,
                        String address, String postalCode,
                        String phoneNumber, String createDate,
@@ -35,95 +48,95 @@ public class CustomerRow {
         this.division = new SimpleStringProperty(division);
     }
 
-
+    /** This method is the customer id property
+     * @return the customer id property
+     */
     public IntegerProperty customerIdProperty(){
         return customerid;
     }
     public final int getCustomerid(){
         return customerIdProperty().get();
     }
-    public final void setCustomerid(int customerid){
-        customerIdProperty().set(customerid);
-    }
+    /** This method is the customer name property
+     * @return the customer name property
+     */
     public StringProperty customerNameProperty(){
         return customerName;
     }
     public final String getCustomerName(){
         return customerNameProperty().get();
     }
-    public final void setCustomerName(String customerName){
-        customerNameProperty().set(customerName);
-    }
+    /** This method is the customer address property
+     * @return the customer address property
+     */
     public StringProperty addressProperty(){
         return address;
     }
     public final String getAddress(){
         return addressProperty().get();
     }
-    public final void setAddress(String address){
-        addressProperty().set(address);
-    }
+    /** This method is the customer postal code property
+     * @return the customer postal code property
+     */
     public StringProperty postalCodeProperty(){
         return postalCode;
     }
     public final String getPostalCode(){
         return postalCodeProperty().get();
     }
-    public final void setPostalCode(String postalCode){
-        postalCodeProperty().set(postalCode);
-    }
+    /** This method is the customer phone number property
+     * @return the customer phone number property
+     */
     public StringProperty phoneNumberProperty(){
         return phoneNumber;
     }
     public final String getPhoneNumber(){
         return phoneNumberProperty().get();
     }
-    public final void setPhoneNumber(String phoneNumber){
-        phoneNumberProperty().set(phoneNumber);
-    }
+    /** This method is the customer record create date property
+     * @return the customer record create date property
+     */
     public StringProperty createDateProperty(){
         return createDate;
     }
     public final String getCreateDate(){
         return createDateProperty().get();
     }
-    public final void setCreateDate(String createDate){
-        createDateProperty().set(createDate);
-    }
+    /** This method is the customer record created by property
+     * @return the customer record created by property
+     */
     public StringProperty createdByProperty(){
         return createdBy;
     }
     public final String getCreatedBy(){
         return createdByProperty().get();
     }
-    public final void setCreatedBy(String createdBy){
-        createdByProperty().set(createdBy);
-    }
+    /** This method is the customer record updated date property
+     * @return the customer record updated date property
+     */
     public StringProperty lastUpdateProperty(){
         return lastUpdate;
     }
     public final String getLastUpdate(){
         return lastUpdateProperty().get();
     }
-    public final void setLastUpdate(String lastUpdate){
-        lastUpdateProperty().set(lastUpdate);
-    }
+    /** This method is the customer record updated by property
+     * @return the customer record updated by property
+     */
     public StringProperty lastUpdatedByProperty(){
         return lastUpdatedBy;
     }
     public final String getLastUpdatedBy(){
         return lastUpdatedByProperty().get();
     }
-    public final void setLastUpdatedBy(String lastUpdatedBy){
-        lastUpdatedByProperty().set(lastUpdatedBy);
-    }
+    /** This method is the customer division property
+     * @return the customer division property
+     */
     public StringProperty divisionProperty(){
         return division;
     }
     public final String getDivision(){
         return divisionProperty().get();
     }
-    public final void setDivision(String division) {
-        divisionProperty().set(division);
-    }
+
 }

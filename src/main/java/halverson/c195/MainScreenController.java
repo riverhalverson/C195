@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
+/** This class is the controller for the main screen of the application */
 public class MainScreenController implements Initializable {
     public RadioButton CustomersOption;
     public RadioButton WeeklyOption;
@@ -54,12 +54,18 @@ public class MainScreenController implements Initializable {
     private static CustomerRow customer = null;
     private static AppointmentRow appointment = null;
 
+    /** This method exits the user out of the application
+     * @param actionEvent the exit button is clicked
+     */
     public void OnExitClick(ActionEvent actionEvent) {
         System.out.println("Exited");
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
     }
 
+    /** This method takes the user to the reports page
+     * @param actionEvent the report button is clicked
+     */
     public void OnReportsClick(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("Reports.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -68,7 +74,9 @@ public class MainScreenController implements Initializable {
         stage.setScene(addProductsMenu);
         stage.show();
     }
-
+    /** This method changes the main table view if view by customer is selected
+     * @param actionEvent the customer button is clicked
+     */
     public void OnCustomerOptionClick(ActionEvent actionEvent) {
         AddButton.setText("Add Customer");
         UpdateButton.setText("Update Customer");
@@ -79,7 +87,9 @@ public class MainScreenController implements Initializable {
         CustomerTable.setupCustomerTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateCustomerTable();
     }
-
+    /** This method changes the main table view if view by weekly apts is selected
+     * @param actionEvent the weekly radio button is clicked
+     */
     public void OnWeeklyOptionClick(ActionEvent actionEvent) {
         AddButton.setText("Add Appointment");
         UpdateButton.setText("Update Appointment");
@@ -89,7 +99,9 @@ public class MainScreenController implements Initializable {
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTableWeek();
     }
-
+    /** This method changes the main table view if view by monthly apts is selected
+     * @param actionEvent the monthly radio button is clicked
+     */
     public void OnMonthlyOptionClick(ActionEvent actionEvent) {
         AddButton.setText("Add Appointment");
         UpdateButton.setText("Update Appointment");
@@ -99,7 +111,9 @@ public class MainScreenController implements Initializable {
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTableMonth();
     }
-
+    /** This method changes the main table view if view all apts is selected
+     * @param actionEvent the all apts radio button is clicked
+     */
     public void OnAllOptionClick(ActionEvent actionEvent) {
         AddButton.setText("Add Appointment");
         UpdateButton.setText("Update Appointment");
@@ -109,7 +123,9 @@ public class MainScreenController implements Initializable {
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTable();
     }
-
+    /** This method takes the user to the add customer or add appointment window
+     * @param actionEvent the add button is clicked
+     */
     public void OnAddClick(ActionEvent actionEvent) throws IOException {
         if(customerSelected) {
             Parent root = FXMLLoader.load(getClass().getResource("AddCustomer.fxml"));
@@ -136,7 +152,9 @@ public class MainScreenController implements Initializable {
             }
         }
     }
-
+    /** This method takes the users to the delete customer or delete appointment window
+     * @param actionEvent the delete button is clicked
+     */
     public void OnDeleteClick(ActionEvent actionEvent) throws SQLException {
         if (customerSelected) {
             customer = (CustomerRow) tableView.getSelectionModel().getSelectedItem();
@@ -204,7 +222,9 @@ public class MainScreenController implements Initializable {
             }
         }
     }
-
+    /** This method takes the user to the update customer or update appointment window
+     * @param actionEvent the update button is clicked
+     */
     public void OnUpdateClick(ActionEvent actionEvent) throws IOException {
         if(customerSelected) {
             customer = (CustomerRow) tableView.getSelectionModel().getSelectedItem();
@@ -256,8 +276,7 @@ public class MainScreenController implements Initializable {
             }
         }
     }
-
-
+    /** This method populates the customer table from the database */
     public void populateCustomerTable(){
 
         tableView.getItems().clear();
@@ -312,6 +331,7 @@ public class MainScreenController implements Initializable {
         Col9.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
         Col10.setCellValueFactory(new PropertyValueFactory<>("division"));
     }
+    /** This method populates the appointment table from the database */
     public void populateAppointmentTable(){
 
         tableView.getItems().clear();
@@ -370,6 +390,10 @@ public class MainScreenController implements Initializable {
         Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
         Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
     }
+    /** This method populates the appointment table from the database and filters by week
+     * LAMBDA this is one of the lambda expressions I used, it simplifies the code by being
+     * able to reuse a single function to populate the table with a database query, and has
+     * the additional functionality to filter by the criteria given, in this case by weekly apts*/
     public void populateAppointmentTableWeek(){
 
         try {
@@ -385,7 +409,6 @@ public class MainScreenController implements Initializable {
             throw new RuntimeException(e);
         }
 
-
         Col1.setCellValueFactory(new PropertyValueFactory<>("appointmentid"));
         Col2.setCellValueFactory(new PropertyValueFactory<>("title"));
         Col3.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -397,6 +420,7 @@ public class MainScreenController implements Initializable {
         Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
         Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
     }
+    /** This method populates the appointment table from the database and filters it by the month the appt is in*/
     public void populateAppointmentTableMonth(){
         //reset table view
         tableView.getItems().clear();
