@@ -1,5 +1,6 @@
 package halverson.c195;
 
+import halverson.c195.helper.DisplayAlert;
 import halverson.c195.helper.GetId;
 import halverson.c195.helper.JDBC;
 import javafx.event.ActionEvent;
@@ -8,6 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -18,6 +21,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.EmptyStackException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,10 +95,25 @@ public class AddCustomerController implements Initializable {
         String postalCode = AddCustomerPostalField.getText();
         String phoneNumber = AddCustomerPhoneField.getText();
 
+        if(name.isEmpty()){
+            DisplayAlert.emptyAlert("Name");
+            throw new RuntimeException("Name field cannot be blank");
+        }
+        if(address.isEmpty()){
+            DisplayAlert.emptyAlert("Address");
+            throw new RuntimeException("Address field cannot be blank");
+        }
+        if(postalCode.isEmpty()){
+            DisplayAlert.emptyAlert("Postalcode");
+            throw new RuntimeException("Postalcode field cannot be blank");
+        }
+        if(phoneNumber.isEmpty()){
+            DisplayAlert.emptyAlert("Phone number");
+            throw new RuntimeException("Phone number field cannot be blank");
+        }
+
 
         int rowsAffected = CustomerQuery.insertCustomer(name, address, postalCode, phoneNumber, divisionId);
-
-
         //display main menu
         Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

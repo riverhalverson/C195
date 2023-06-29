@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class GetId {
 
     public static int getUserId(String seekingName) throws SQLException {
-        String sql = "SELECT * FROM CONTACTS WHERE Contact_Name = ?";
+        String sql = "SELECT * FROM USERS WHERE User_Name = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, seekingName);
         ResultSet rs = ps.executeQuery();
@@ -20,19 +20,24 @@ public class GetId {
 
         return userID;
     }
-    public static int getContactId(String seekingName) throws SQLException {
+    public static int getContactId(String seekingName) {
         String sql = "SELECT * FROM CONTACTS WHERE Contact_Name = ?";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, seekingName);
-        ResultSet rs = ps.executeQuery();
+        try {
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setString(1, seekingName);
+            ResultSet rs = ps.executeQuery();
 
-        int contactID = 0;
+            int contactID = 0;
 
-        while(rs.next()){
-            contactID = rs.getInt("Contact_ID");
+            while(rs.next()){
+                contactID = rs.getInt("Contact_ID");
+                return contactID;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
-        return contactID;
+        return -1;
     }
     public static int getDivisionId(String division) throws SQLException {
         String sql = "SELECT * FROM FIRST_LEVEL_DIVISIONS WHERE Division = ?";

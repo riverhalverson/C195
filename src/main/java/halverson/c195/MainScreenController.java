@@ -1,8 +1,6 @@
 package halverson.c195;
 
-import halverson.c195.helper.GetId;
-import halverson.c195.helper.GetName;
-import halverson.c195.helper.JDBC;
+import halverson.c195.helper.*;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,11 +21,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.temporal.WeekFields;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class MainScreenController implements Initializable {
     public RadioButton CustomersOption;
@@ -59,7 +60,13 @@ public class MainScreenController implements Initializable {
         stage.close();
     }
 
-    public void OnReportsClick(ActionEvent actionEvent) {
+    public void OnReportsClick(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Reports.fxml"));
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene addProductsMenu = new Scene(root, 930, 700);
+        stage.setTitle("Add Customer Menu");
+        stage.setScene(addProductsMenu);
+        stage.show();
     }
 
     public void OnCustomerOptionClick(ActionEvent actionEvent) {
@@ -80,7 +87,7 @@ public class MainScreenController implements Initializable {
         customerSelected = false;
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
-        populateAppointmentTable();
+        populateAppointmentTableWeek();
     }
 
     public void OnMonthlyOptionClick(ActionEvent actionEvent) {
@@ -90,7 +97,7 @@ public class MainScreenController implements Initializable {
         customerSelected = false;
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
-        populateAppointmentTable();
+        populateAppointmentTableMonth();
     }
 
     public void OnAllOptionClick(ActionEvent actionEvent) {
@@ -133,33 +140,66 @@ public class MainScreenController implements Initializable {
     public void OnDeleteClick(ActionEvent actionEvent) throws SQLException {
         if (customerSelected) {
             customer = (CustomerRow) tableView.getSelectionModel().getSelectedItem();
+            String name = customer.getCustomerName();
+            int rowsAffected = 0;
 
             //checks if no customer was selected, displays error
             if (customer == null) {
-                Alert noSelectionError = new Alert(Alert.AlertType.ERROR, "No customer selected");
-
-                Optional<ButtonType> result = noSelectionError.showAndWait();
+                DisplayAlert.customError("No customer selected");
             } else {
-                int customerid = customer.getCustomerid();
-                String customerName = customer.getCustomerName();
+                Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove Customer: "
+                + customer.getCustomerName());
 
-                int rowsAffected = CustomerQuery.deleteCustomer(customerid);
+                Optional<ButtonType> choiceResult = confirmDelete.showAndWait();
+
+                //if ok is selected, remove part
+                if (choiceResult.isPresent() && choiceResult.get() == ButtonType.OK) {
+                    int customerid = customer.getCustomerid();
+                    String customerName = customer.getCustomerName();
+
+                    rowsAffected = CustomerQuery.deleteCustomer(customerid);
+                }
 
                 //checks if delete was successful
                 if(rowsAffected == 0){
-                    Alert noSelectionError = new Alert(Alert.AlertType.ERROR,
-                            customerName + " was not deleted successfully");
-
-                    Optional<ButtonType> result = noSelectionError.showAndWait();
+                    DisplayAlert.customError(name + " was not deleted successfully, there are associated appointments");
                 }
                 else{
-                    Alert noSelectionError = new Alert(Alert.AlertType.ERROR,
-                            customerName + " was deleted successfully");
-
-                    Optional<ButtonType> result = noSelectionError.showAndWait();
+                    DisplayAlert.customError(name + " was deleted successfully");
 
                     //reloads customer table to show updates
                     populateCustomerTable();
+                }
+            }
+        }
+        else{
+            appointment = (AppointmentRow) tableView.getSelectionModel().getSelectedItem();
+            int rowsAffected = 0;
+
+            //checks if no appointment selected
+            if(appointment == null){
+                DisplayAlert.customError("No appointment selected");
+            }
+            else{
+                Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Are you sure you want to remove this Appointment?");
+
+                Optional<ButtonType> choiceResult = confirmDelete.showAndWait();
+
+                //if ok is selected, remove part
+                if (choiceResult.isPresent() && choiceResult.get() == ButtonType.OK) {
+                    int appointmentid = appointment.getappointmentid();
+
+                    rowsAffected = AppointmentsQuery.deleteAppointment(appointmentid);
+                }
+                if(rowsAffected == 0){
+                    DisplayAlert.customError("Appointment was not deleted successfully");
+                }
+                else{
+                    DisplayAlert.customError("Appointment was deleted successfully");
+
+                    //reloads customer table to show updates
+                    populateAppointmentTable();
                 }
             }
         }
@@ -294,8 +334,99 @@ public class MainScreenController implements Initializable {
                 int contactid = rs.getInt("Contact_ID");
                 String contact = GetName.getContactName(contactid);
                 String type = rs.getString("Type");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+                LocalDateTime startUtc = rs.getTimestamp("Start").toLocalDateTime();
+
+                LocalDateTime endUtc = rs.getTimestamp("End").toLocalDateTime();
+
+                //convert times to user times
+                LocalDateTime start = TZConvert.UTCToUser(startUtc).toLocalDateTime();
+
+                LocalDateTime end = TZConvert.UTCToUser(endUtc).toLocalDateTime();
+
+                int customerid = rs.getInt("Customer_ID");
+                int userid = rs.getInt("User_ID");
+
+                AppointmentRow ar = new AppointmentRow( appointmentid, title,
+                        description, location, contact, type, start,
+                        end, customerid, userid);
+
+                apptList.add(ar);
+            }
+
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        tableView.setItems(apptList);
+
+        Col1.setCellValueFactory(new PropertyValueFactory<>("appointmentid"));
+        Col2.setCellValueFactory(new PropertyValueFactory<>("title"));
+        Col3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        Col4.setCellValueFactory(new PropertyValueFactory<>("location"));
+        Col5.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        Col6.setCellValueFactory(new PropertyValueFactory<>("type"));
+        Col7.setCellValueFactory(new PropertyValueFactory<>("start"));
+        Col8.setCellValueFactory(new PropertyValueFactory<>("end"));
+        Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
+        Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
+    }
+    public void populateAppointmentTableWeek(){
+
+        try {
+            LocalDate today = LocalDate.now();
+            int weekOfYear = today.get(WeekFields.of(Locale.getDefault()).weekOfYear());
+
+            ObservableList<AppointmentRow> list = AppointmentsQuery.get().stream()
+                    .filter(aptRow -> aptRow.getStart().get(WeekFields.of(Locale.getDefault()).weekOfYear()) == weekOfYear)
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+            tableView.setItems(list);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        Col1.setCellValueFactory(new PropertyValueFactory<>("appointmentid"));
+        Col2.setCellValueFactory(new PropertyValueFactory<>("title"));
+        Col3.setCellValueFactory(new PropertyValueFactory<>("description"));
+        Col4.setCellValueFactory(new PropertyValueFactory<>("location"));
+        Col5.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        Col6.setCellValueFactory(new PropertyValueFactory<>("type"));
+        Col7.setCellValueFactory(new PropertyValueFactory<>("start"));
+        Col8.setCellValueFactory(new PropertyValueFactory<>("end"));
+        Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
+        Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
+    }
+    public void populateAppointmentTableMonth(){
+        //reset table view
+        tableView.getItems().clear();
+        ObservableList<AppointmentRow> apptList = FXCollections.observableArrayList();
+
+
+        ResultSet rs = null;
+        Statement stmt;
+        String sql = "SELECT * FROM APPOINTMENTS WHERE MONTH(Start)=MONTH(now())";
+
+        try{
+            stmt = JDBC.connection.createStatement();
+            rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                int appointmentid = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                int contactid = rs.getInt("Contact_ID");
+                String contact = GetName.getContactName(contactid);
+                String type = rs.getString("Type");
+                LocalDateTime startUtc = rs.getTimestamp("Start").toLocalDateTime();
+
+                LocalDateTime endUtc = rs.getTimestamp("End").toLocalDateTime();
+
+                //convert times to user times
+                LocalDateTime start = TZConvert.UTCToUser(startUtc).toLocalDateTime();
+
+                LocalDateTime end = TZConvert.UTCToUser(endUtc).toLocalDateTime();
+
                 int customerid = rs.getInt("Customer_ID");
                 int userid = rs.getInt("User_ID");
 

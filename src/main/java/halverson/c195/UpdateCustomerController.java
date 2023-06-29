@@ -46,7 +46,6 @@ public class UpdateCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CountryComboBox();
 
-
     }
 
     private void CountryComboBox(){
@@ -104,8 +103,6 @@ public class UpdateCustomerController implements Initializable {
         UpdateCustomerAddressField.setText(String.valueOf((customer.getAddress())));
         UpdateCustomerPostalField.setText(String.valueOf((customer.getPostalCode())));
         UpdateCustomerPhoneField.setText(String.valueOf((customer.getPhoneNumber())));
-        UpdateCustomerCountriesBox.setPromptText(GetName.getCountry(GetId.getDivisionId(customer.getDivision())));
-        UpdateCustomerDivisionsBox.setPromptText(customer.getDivision());
 
         //sets values to existing, incase nothing is changed
         name = String.valueOf((customer.getCustomerName()));
@@ -113,6 +110,22 @@ public class UpdateCustomerController implements Initializable {
         postalCode = String.valueOf((customer.getPostalCode()));
         phoneNumber = String.valueOf((customer.getPhoneNumber()));
         divisionId = GetId.getDivisionId(customer.getDivision());
+
+        String country = GetName.getCountry(GetId.getDivisionId(customer.getDivision()));
+
+        for(String b : UpdateCustomerCountriesBox.getItems() ){
+            if(country.equals(b)){
+                UpdateCustomerCountriesBox.setValue(b);
+            }
+        }
+        divisionId = GetId.getDivisionId(customer.getDivision());
+        DivisionComboBox();
+
+        for(String d : UpdateCustomerDivisionsBox.getItems()){
+            if(GetName.getDivisionName(divisionId).equals(d)){
+                UpdateCustomerDivisionsBox.setValue(d);
+            }
+        }
     }
     public void OnCountrySelect(ActionEvent actionEvent) throws SQLException {
         DivisionComboBox();

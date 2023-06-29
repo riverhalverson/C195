@@ -1,0 +1,18 @@
+Jun 28, 2023 9:47:11 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:09:47:11.290175800
+
+Jun 28, 2023 9:47:51 AM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:09:47:51.980484
+
+Jun 28, 2023 7:03:15 PM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:19:03:15.233082200
+
+Jun 28, 2023 7:28:46 PM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:19:28:46.083272400
+
+Jun 28, 2023 7:59:40 PM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:19:59:40.863588600
+
+Jun 28, 2023 8:09:35 PM halverson.c195.LoginLogger log
+INFO: Successful login | Date:2023-06-28 | Time:20:09:35.366482400
+

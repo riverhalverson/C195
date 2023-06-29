@@ -1,8 +1,8 @@
 package halverson.c195;
 
-import halverson.c195.helper.DisplayAlert;
-import halverson.c195.helper.GetId;
-import halverson.c195.helper.JDBC;
+import halverson.c195.helper.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +20,9 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -36,6 +39,8 @@ public class LoginController implements Initializable {
 
     public static boolean english = true;
     public static boolean french = false;
+
+    public String message = "";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,13 +69,18 @@ public class LoginController implements Initializable {
         username = userNameField.getText();
         password = passwordField.getText();
 
+        int userId = GetId.getUserId(username);
+
+
         //check for blank inputs
         if(username.isBlank() || password.isBlank()) {
             if(english){
                 DisplayAlert.customError("Username or password is blank");
+                LoginLogger.log(false);
             }
             else{
                 DisplayAlert.customError("Le nom d'utilisateur ou le mot de passe est vide");
+                LoginLogger.log(false);
             }
         }
         else {
@@ -95,14 +105,20 @@ public class LoginController implements Initializable {
                 found = false;
                 if (english) {
                     DisplayAlert.customError("Username not found");
+                    LoginLogger.log(false);
                 } else {
                     DisplayAlert.customError("Nom d'utilisateur introuvable");
+                    LoginLogger.log(false);
                 }
             }
             //if user was found
             if (found) {
                 if (username.equals(queryUsername) && password.equals(queryPassword)) {
                     System.out.println("Success");
+                    LoginLogger.log(true);
+
+                    UpcomingApts.checkApts(userId);
+
                     Parent root = FXMLLoader.load(getClass().getResource("Mainscreen.fxml"));
                     Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     Scene addProductsMenu = new Scene(root, 1640, 900);
@@ -112,11 +128,14 @@ public class LoginController implements Initializable {
                 } else {
                     if (english) {
                         DisplayAlert.customError("Password incorrect");
+                        LoginLogger.log(false);
                     } else {
                         DisplayAlert.customError("Mot de passe incorrect");
+                        LoginLogger.log(false);
                     }
                 }
             }
         }
     }
+
 }
