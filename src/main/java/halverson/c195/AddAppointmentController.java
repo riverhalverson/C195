@@ -104,6 +104,7 @@ public class AddAppointmentController implements Initializable {
             DisplayAlert.customError("Appointment out of Business Hours (8:00 a.m. to 10:00 p.m. EST");
         }
         else {
+            //convert to utc
                 ZonedDateTime startUtc = TZConvert.UserToUTC(start);
                 ZonedDateTime endUtc = TZConvert.UserToUTC(end);
 
@@ -288,8 +289,12 @@ public class AddAppointmentController implements Initializable {
         LocalTime openHour = LocalTime.of(8,00);
         LocalTime closeHour = LocalTime.of(22, 00);
 
-        LocalTime aptStart = start.toLocalTime();
-        LocalTime aptEnd = end.toLocalTime();
+        //convert to eastern time
+        ZonedDateTime aptStartEST = TZConvert.UserToEST(LocalDateTime.from(start));
+        LocalTime aptStart = aptStartEST.toLocalTime();
+
+        ZonedDateTime aptEndEST = TZConvert.UserToEST((LocalDateTime.from(end)));
+        LocalTime aptEnd = aptEndEST.toLocalTime();
 
         if(aptStart.isBefore(openHour) || aptEnd.isAfter(closeHour)){
             withinHours = false;

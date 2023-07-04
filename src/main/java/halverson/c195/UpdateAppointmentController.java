@@ -43,6 +43,7 @@ public class UpdateAppointmentController implements Initializable {
 
     private AppointmentRow appointment = null;
 
+    int aptId;
     String title;
     String description;
     String location;
@@ -124,7 +125,7 @@ public class UpdateAppointmentController implements Initializable {
         LocalDateTime start = LocalDateTime.of(datePicked, startTime);
         LocalDateTime end = LocalDateTime.of(datePicked, endTime);
 
-        boolean overlap = checkOverlap(start, end, customerId);
+        boolean overlap = checkOverlap(start, end, customerId, aptId);
         boolean duringHours = duringWorkingHours(start, end);
 
         //checks if start time and after end time and vise versa
@@ -213,6 +214,7 @@ public class UpdateAppointmentController implements Initializable {
     public void AppointmentToModify(AppointmentRow aptToModify) throws SQLException {
         appointment = aptToModify;
 
+        aptId = appointment.getappointmentid();
         AppointmentIdField.setPromptText(String.valueOf((appointment.getappointmentid())));
         TitleField.setText(String.valueOf((appointment.gettitle())));
         DescriptionField.setText(String.valueOf((appointment.getdescription())));
@@ -245,7 +247,7 @@ public class UpdateAppointmentController implements Initializable {
      * @param customerId the customer id to check overlaps for
      * @return true or false if there is an overlap
      */
-    public boolean checkOverlap(LocalDateTime start, LocalDateTime end, int customerId) throws SQLException {
+    public boolean checkOverlap(LocalDateTime start, LocalDateTime end, int customerId, int apptId) throws SQLException {
         boolean overlap = false;
 
         String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ?";
@@ -254,7 +256,7 @@ public class UpdateAppointmentController implements Initializable {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, customerId);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while(rs.next() && (rs.getInt("Appointment_ID") != apptId)){
                 LocalDateTime rStart = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime rEnd = rs.getTimestamp("End").toLocalDateTime();
 
@@ -289,8 +291,12 @@ public class UpdateAppointmentController implements Initializable {
         LocalTime openHour = LocalTime.of(8,00);
         LocalTime closeHour = LocalTime.of(22, 00);
 
-        LocalTime aptStart = start.toLocalTime();
-        LocalTime aptEnd = end.toLocalTime();
+        //convert to eastern time
+        ZonedDateTime aptStartEST = TZConvert.UserToEST(LocalDateTime.from(start));
+        LocalTime aptStart = aptStartEST.toLocalTime();
+
+        ZonedDateTime aptEndEST = TZConvert.UserToEST((LocalDateTime.from(end)));
+        LocalTime aptEnd = aptEndEST.toLocalTime();
 
         if(aptStart.isBefore(openHour) || aptEnd.isAfter(closeHour)){
             withinHours = false;

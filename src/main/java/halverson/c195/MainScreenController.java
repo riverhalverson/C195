@@ -192,6 +192,8 @@ public class MainScreenController implements Initializable {
         }
         else{
             appointment = (AppointmentRow) tableView.getSelectionModel().getSelectedItem();
+            int aptId = appointment.getappointmentid();
+            String type = appointment.gettype();
             int rowsAffected = 0;
 
             //checks if no appointment selected
@@ -200,7 +202,8 @@ public class MainScreenController implements Initializable {
             }
             else{
                 Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION,
-                        "Are you sure you want to remove this Appointment?");
+                        "Are you sure you want to remove this Appointment?\n"+
+                        "Appointment ID: " + aptId + " | Type: " + type);
 
                 Optional<ButtonType> choiceResult = confirmDelete.showAndWait();
 
@@ -211,10 +214,12 @@ public class MainScreenController implements Initializable {
                     rowsAffected = AppointmentsQuery.deleteAppointment(appointmentid);
                 }
                 if(rowsAffected == 0){
-                    DisplayAlert.customError("Appointment was not deleted successfully");
+                    DisplayAlert.customError(type + " appointment with ID of " + aptId +
+                            " was not deleted successfully");
                 }
                 else{
-                    DisplayAlert.customError("Appointment was deleted successfully");
+                    DisplayAlert.customError(type+ " appointment with ID of " + aptId +
+                            " was deleted successfully");
 
                     //reloads customer table to show updates
                     populateAppointmentTable();

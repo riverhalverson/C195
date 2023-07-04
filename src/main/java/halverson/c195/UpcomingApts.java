@@ -81,7 +81,7 @@ public class UpcomingApts {
                 LocalDateTime start = aRow.getStart();
                 LocalDateTime end = aRow.getEnd();
 
-                String apptMessage = "Appointment ID:" + aptId + ", Start:" + start + " End:" +
+                String apptMessage = "Appointment ID: " + aptId + ", Start: " + start + " End: " +
                         end + " \n";
 
                 matchingApts.add(apptMessage);

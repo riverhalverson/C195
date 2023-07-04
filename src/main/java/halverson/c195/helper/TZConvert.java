@@ -44,9 +44,24 @@ public class TZConvert {
 
         ZonedDateTime utcTime = ZonedDateTime.of(ldt, utcZoneId);
 
-        ZoneId estZoneId = ZoneId.of("EST");
+        ZoneId estZoneId = ZoneId.of("US/Eastern");
 
         ZonedDateTime estTime = ZonedDateTime.ofInstant(utcTime.toInstant(), estZoneId);
+
+        return estTime;
+    }
+    /** This method converts a time from user to est timezone
+     * @param ldt the localdatetime to convert
+     * @return estTime the converted time
+     */
+    public static ZonedDateTime UserToEST(LocalDateTime ldt){
+        ZoneId localZoneId = ZoneId.systemDefault();
+
+        ZonedDateTime userTime = ZonedDateTime.of(ldt,localZoneId);
+
+        ZoneId estZoneId = ZoneId.of("US/Eastern");
+
+        ZonedDateTime estTime = ZonedDateTime.ofInstant(userTime.toInstant(), estZoneId);
 
         return estTime;
     }

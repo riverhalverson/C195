@@ -27,6 +27,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -115,7 +116,10 @@ public class ReportsController implements Initializable {
     public void populateMonthlyAppointmentTable(String type) throws SQLException {
         AppointmentMonthTable.getItems().clear();
 
-        ObservableList<MonthlyApptRow> monthlyTypes = FXCollections.observableArrayList();
+        Vector<Month> monthsFound = new Vector<Month>(0);
+        Vector<Month> monthOccurances = new Vector<Month>(0);
+        ObservableList<MonthlyApptRow> monthlyRows = FXCollections.observableArrayList();
+
         ResultSet rs = null;
 
         String sql = "SELECT * FROM APPOINTMENTS WHERE Type = ?";
@@ -129,35 +133,12 @@ public class ReportsController implements Initializable {
                 LocalDateTime date = rs.getTimestamp("Start").toLocalDateTime();
                 Month month = date.getMonth();
 
-                //checks if appt list is empty before trying to loop through it
-                if(monthlyTypes.size() != 0){
-                    for(int i = 0; i < monthlyTypes.size(); i++){
-                        Month currentMonth;
-                        int count = 0;
+                monthOccurances.addElement(month);
 
-                        MonthlyApptRow typeMonth = monthlyTypes.get(i);
-
-                        currentMonth = typeMonth.getMonth();
-
-
-                        if(currentMonth == month){
-                            count++;
-                            monthlyTypes.remove(i);
-
-                            MonthlyApptRow typeMonthFound = new MonthlyApptRow(month, count);
-                            monthlyTypes.add(typeMonthFound);
-                        }
-                        else{
-                            MonthlyApptRow typeMonthNone = new MonthlyApptRow(month, 1);
-                            monthlyTypes.add(typeMonthNone);
-                        }
-                    }
-
+                if(!monthsFound.contains(month)){
+                    monthsFound.addElement(month);
                 }
-                else{
-                    MonthlyApptRow typeMonthNew = new MonthlyApptRow(month, 1);
-                    monthlyTypes.add(typeMonthNew);
-                }
+
 
             }
 
@@ -165,7 +146,26 @@ public class ReportsController implements Initializable {
             ex.printStackTrace();
         }
 
-        AppointmentMonthTable.setItems(monthlyTypes);
+        if(monthOccurances.size() != 0){
+            for(int i = 0; i < monthsFound.size(); i++){
+                Month monthSeeking = monthsFound.elementAt(i);
+                int count = 0;
+
+                for(int j = 0; j < monthOccurances.size(); j++){
+                    Month currentMonth = monthOccurances.elementAt(j);
+
+                    if(monthSeeking.equals(currentMonth)){
+                        count++;
+                    }
+                }
+
+                MonthlyApptRow row = new MonthlyApptRow(monthSeeking, count);
+                monthlyRows.add(row);
+            }
+
+        }
+
+        AppointmentMonthTable.setItems(monthlyRows);
 
         MonthAppointmentCol.setCellValueFactory(new PropertyValueFactory<>("month"));
         MonthNumberCol.setCellValueFactory(new PropertyValueFactory<>("count"));
@@ -175,6 +175,8 @@ public class ReportsController implements Initializable {
 
         AppointmentCountryTable.getItems().clear();
 
+        Vector<String> countriesFound = new Vector<String>(0);
+        Vector<String> countryOccurances = new Vector<String>(0);
         ObservableList<CountrySumRow> countrySum = FXCollections.observableArrayList();
 
         ResultSet rs = null;
@@ -187,44 +189,39 @@ public class ReportsController implements Initializable {
             stmt = JDBC.connection.createStatement();
             rs = stmt.executeQuery(sql);
 
+            //make list of country occurances in customers
             while(rs.next()){
-                String country = GetName.getCountry(rs.getInt("Division_ID"));
+                String country = String.valueOf(GetName.getCountry(rs.getInt("Division_ID")));
 
+                countryOccurances.addElement(country);
 
-                //checks if appt list is empty before trying to loop through it
-                if(countrySum.size() != 0){
-                    for(int i = 0; i < countrySum.size(); i++){
-                        String currentCountry = "";
-                        int count = 0;
-
-                        CountrySumRow countryCount = countrySum.get(i);
-
-                        currentCountry = countryCount.getCountry();
-
-
-                        if(currentCountry.equals(country)){
-                            count++;
-                            countrySum.remove(i);
-
-                            CountrySumRow countryCountRow = new CountrySumRow(country, count);
-                            countrySum.add(countryCountRow);
-                        }
-                        else{
-                            CountrySumRow countryCountRow = new CountrySumRow(country, 1);
-                            countrySum.add(countryCountRow);
-                        }
-                    }
-
+                if(!countriesFound.contains(country)){
+                    countriesFound.addElement(country);
                 }
-                else{
-                    CountrySumRow countryCountRow = new CountrySumRow(country, 1);
-                    countrySum.add(countryCountRow);
-                }
-
             }
 
         }catch (SQLException ex) {
             ex.printStackTrace();
+        }
+
+        //sum the amount of customers for each country if customer list is not empty
+        if(countryOccurances.size() != 0){
+            for(int i = 0; i < countriesFound.size(); i++){
+                String countrySeeking = countriesFound.elementAt(i);
+                int count = 0;
+
+                for(int j = 0; j < countryOccurances.size(); j++){
+                    String currentCountry = countryOccurances.elementAt(j);
+
+                    if(countrySeeking.equals(currentCountry)){
+                        count++;
+                    }
+                }
+
+                CountrySumRow row = new CountrySumRow(countrySeeking, count);
+                countrySum.add(row);
+            }
+
         }
 
         AppointmentCountryTable.setItems(countrySum);
@@ -283,4 +280,5 @@ public class ReportsController implements Initializable {
         TypeComboBox.getItems().add(briefType);
         TypeComboBox.getItems().add(consultType);
     }
+
 }
