@@ -79,6 +79,7 @@ public class LoginController implements Initializable {
         //check for blank inputs
         if(username.isBlank() || password.isBlank()) {
             if(english){
+                LoginLogger.log(false);
                 DisplayAlert.customError("Username or password is blank");
                 LoginLogger.log(false);
             }

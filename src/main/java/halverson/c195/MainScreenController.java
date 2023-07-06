@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,9 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.logging.Level;
@@ -49,6 +48,8 @@ public class MainScreenController implements Initializable {
     public TableColumn Col9;
     public TableColumn Col10;
     public TableView tableView;
+    public Text TimezoneLabel;
+
     private static boolean customerSelected = false;
 
     private static CustomerRow customer = null;
@@ -158,13 +159,14 @@ public class MainScreenController implements Initializable {
     public void OnDeleteClick(ActionEvent actionEvent) throws SQLException {
         if (customerSelected) {
             customer = (CustomerRow) tableView.getSelectionModel().getSelectedItem();
-            String name = customer.getCustomerName();
-            int rowsAffected = 0;
 
             //checks if no customer was selected, displays error
             if (customer == null) {
                 DisplayAlert.customError("No customer selected");
             } else {
+
+                String name = customer.getCustomerName();
+                int rowsAffected = 0;
                 Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove Customer: "
                 + customer.getCustomerName());
 
@@ -178,29 +180,24 @@ public class MainScreenController implements Initializable {
                     rowsAffected = CustomerQuery.deleteCustomer(customerid);
                 }
 
-                //checks if delete was successful
-                if(rowsAffected == 0){
-                    DisplayAlert.customError(name + " was not deleted successfully, there are associated appointments");
-                }
-                else{
-                    DisplayAlert.customError(name + " was deleted successfully");
+                DisplayAlert.customError(name + " was deleted successfully");
 
-                    //reloads customer table to show updates
-                    populateCustomerTable();
-                }
+                //reloads customer table to show updates
+                populateCustomerTable();
+
             }
         }
         else{
             appointment = (AppointmentRow) tableView.getSelectionModel().getSelectedItem();
-            int aptId = appointment.getappointmentid();
-            String type = appointment.gettype();
-            int rowsAffected = 0;
 
             //checks if no appointment selected
             if(appointment == null){
                 DisplayAlert.customError("No appointment selected");
             }
             else{
+                int aptId = appointment.getappointmentid();
+                String type = appointment.gettype();
+                int rowsAffected = 0;
                 Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION,
                         "Are you sure you want to remove this Appointment?\n"+
                         "Appointment ID: " + aptId + " | Type: " + type);
@@ -262,22 +259,29 @@ public class MainScreenController implements Initializable {
         else{
             appointment = (AppointmentRow) tableView.getSelectionModel().getSelectedItem();
 
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("UpdateAppt.fxml"));
-                loader.load();
+            if(appointment == null){
+                Alert noSelectionError = new Alert(Alert.AlertType.ERROR, "No appointment selected");
 
-                UpdateAppointmentController ModifyController = loader.getController();
-                ModifyController.AppointmentToModify(appointment);
+                Optional<ButtonType> result = noSelectionError.showAndWait();
+            }
+            else {
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("UpdateAppt.fxml"));
+                    loader.load();
 
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                Parent scene = loader.getRoot();
-                stage.setTitle("Update Appointment");
-                stage.setScene(new Scene(scene));
-                stage.show();
+                    UpdateAppointmentController ModifyController = loader.getController();
+                    ModifyController.AppointmentToModify(appointment);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                    Parent scene = loader.getRoot();
+                    stage.setTitle("Update Appointment");
+                    stage.setScene(new Scene(scene));
+                    stage.show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -483,10 +487,23 @@ public class MainScreenController implements Initializable {
         Col9.setCellValueFactory(new PropertyValueFactory<>("customerid"));
         Col10.setCellValueFactory(new PropertyValueFactory<>("userid"));
     }
+    /** This method populates the appointment table from the database and filters by week
+     * LAMBDA this is one of the lambda expressions I used, it simplifies the code by being
+     * displaying the local timezone and time with one function call in the initialize method*/
+    public Runnable updateTimeZoneLabel = () -> {
+        ZoneId localZoneId = ZoneId.systemDefault();
+        ZonedDateTime currentDateTime = ZonedDateTime.now(localZoneId);
+        LocalTime currentTime = currentDateTime.toLocalTime();
+        String localTimeZone = localZoneId.getId();
+
+        TimezoneLabel.setText("Your Timezone: " + localTimeZone + "\nCurrent Time: " + currentTime);
+    };
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        customerSelected = false;
         populateAppointmentTable();
 
+        updateTimeZoneLabel.run();
     }
 }

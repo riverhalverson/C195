@@ -1,7 +1,7 @@
 package halverson.c195;
 import javafx.fxml.Initializable;
 
-import java.io.IOException;
+import java.io.*;
 import java.security.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,36 +17,30 @@ public class LoginLogger{
      * @param loginResult the login result, successful or not
      */
     public static void log(boolean loginResult){
-        Logger log = Logger.getLogger("loginlog.txt");
-
-        //create new file if doesnt exist
+        //create new file if does not exist
         try{
-            FileHandler fileHandler = new FileHandler("loginlog.txt", true);
-            SimpleFormatter simpleFormat = new SimpleFormatter();
-            fileHandler.setFormatter(simpleFormat);
-            log.addHandler(fileHandler);
+            PrintWriter logPrint = new PrintWriter(
+                    new FileOutputStream(new File("login_activity.txt"), true));
+
+            if(loginResult == true){
+                LocalDate currentDate = LocalDate.now();
+                LocalTime timestamp = LocalDateTime.now().toLocalTime();
+                String result = "Successful login | Date:" + currentDate + " | Time:" + timestamp + "\n";
+
+                logPrint.append(result);
+            }
+            else{
+                LocalDate currentDate = LocalDate.now();
+                LocalTime timestamp = LocalDateTime.now().toLocalTime();
+                String result = "Unsuccessful login | Date:" + currentDate + " | Time:" + timestamp + "\n";
+
+                logPrint.append(result);
+            }
+
+            logPrint.close();
         }
-        catch (IOException ex) {
+        catch (FileNotFoundException ex) {
             Logger.getLogger(LoginLogger.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        log.setLevel(Level.INFO);
-
-        //sucessful attempt
-        if(loginResult = true){
-            LocalDate currentDate = LocalDate.now();
-            LocalTime timestamp = LocalDateTime.now().toLocalTime();
-            String result = "Successful login | Date:" + currentDate + " | Time:" + timestamp + "\n";
-
-            log.info(result);
-        }
-        else{
-            LocalDate currentDate = LocalDate.now();
-            LocalTime timestamp = LocalDateTime.now().toLocalTime();
-            String result = "Unsuccessful login | Date:" + currentDate + " | Time:" + timestamp + "\n";
-
-            log.info(result);
-
         }
     }
 }

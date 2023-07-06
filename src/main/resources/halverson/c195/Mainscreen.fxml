@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="881.0" prefWidth="1644.0" style="-fx-background-color: f0f0f1;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.MainScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="881.0" prefWidth="1644.0" style="-fx-background-color: f0f0f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.MainScreenController">
    <children>
       <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="55.0" layoutX="671.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="302.0" />
       <Text layoutX="719.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments">
@@ -60,5 +66,10 @@
             <TableColumn fx:id="Col10" prefWidth="99.0" text="User ID" />
         </columns>
       </TableView>
+      <Text fx:id="TimezoneLabel" layoutX="1349.0" layoutY="835.0" strokeType="OUTSIDE" strokeWidth="0.0" text="timezone" wrappingWidth="275.01171875">
+         <font>
+            <Font name="Arial Black" size="14.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
