@@ -1,5 +1,6 @@
 package halverson.c195;
 
+import halverson.c195.entities.AppointmentRow;
 import halverson.c195.helper.DisplayAlert;
 import halverson.c195.helper.GetName;
 import halverson.c195.helper.JDBC;
@@ -86,10 +87,10 @@ public class UpcomingApts {
 
                 matchingApts.add(apptMessage);
             }
-            DisplayAlert.customError(matchingApts.toString());
+            DisplayAlert.customAlert(matchingApts.toString());
         }
         else{
-            DisplayAlert.customError("No Appointments within 15 minutes");
+            DisplayAlert.customAlert("No Appointments within 15 minutes");
         }
 
     }

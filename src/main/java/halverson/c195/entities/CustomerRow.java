@@ -1,4 +1,4 @@
-package halverson.c195;
+package halverson.c195.entities;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -12,10 +12,7 @@ public class CustomerRow {
     private StringProperty address;
     private StringProperty postalCode;
     private StringProperty phoneNumber;
-    private StringProperty createDate;
-    private StringProperty createdBy;
-    private StringProperty lastUpdate;
-    private StringProperty lastUpdatedBy;
+    private StringProperty country;
     private StringProperty division;
 
     /** This method creates a new customer object
@@ -24,27 +21,20 @@ public class CustomerRow {
      * @param address the address of the customer
      * @param postalCode the postal code of the customer
      * @param phoneNumber the phone number of the customer
-     * @param createdBy who created the customer record
-     * @param createDate the created date of the customer record
-     * @param lastUpdate the last updated date of the customer record
-     * @param lastUpdatedBy who last updated the customer record
+     * @param country who last updated the customer record
      * @param division the division id of the customer
      */
     public CustomerRow(int customerid, String customerName,
                        String address, String postalCode,
-                       String phoneNumber, String createDate,
-                       String createdBy, String lastUpdate,
-                       String lastUpdatedBy, String division){
+                       String phoneNumber,
+                       String country, String division){
 
         this.customerid = new SimpleIntegerProperty(customerid);
         this.customerName = new SimpleStringProperty(customerName);
         this.address = new SimpleStringProperty(address);
         this.postalCode = new SimpleStringProperty(postalCode);
         this.phoneNumber = new SimpleStringProperty(phoneNumber);
-        this.createDate = new SimpleStringProperty(createDate);
-        this.createdBy = new SimpleStringProperty(createdBy);
-        this.lastUpdate = new SimpleStringProperty(lastUpdate);
-        this.lastUpdatedBy = new SimpleStringProperty(lastUpdatedBy);
+        this.country = new SimpleStringProperty(country);
         this.division = new SimpleStringProperty(division);
     }
 
@@ -96,38 +86,11 @@ public class CustomerRow {
     /** This method is the customer record create date property
      * @return the customer record create date property
      */
-    public StringProperty createDateProperty(){
-        return createDate;
-    }
-    public final String getCreateDate(){
-        return createDateProperty().get();
-    }
-    /** This method is the customer record created by property
-     * @return the customer record created by property
-     */
-    public StringProperty createdByProperty(){
-        return createdBy;
-    }
-    public final String getCreatedBy(){
-        return createdByProperty().get();
-    }
-    /** This method is the customer record updated date property
-     * @return the customer record updated date property
-     */
-    public StringProperty lastUpdateProperty(){
-        return lastUpdate;
-    }
-    public final String getLastUpdate(){
-        return lastUpdateProperty().get();
-    }
-    /** This method is the customer record updated by property
-     * @return the customer record updated by property
-     */
-    public StringProperty lastUpdatedByProperty(){
-        return lastUpdatedBy;
+    public StringProperty countryProperty(){
+        return country;
     }
     public final String getLastUpdatedBy(){
-        return lastUpdatedByProperty().get();
+        return countryProperty().get();
     }
     /** This method is the customer division property
      * @return the customer division property

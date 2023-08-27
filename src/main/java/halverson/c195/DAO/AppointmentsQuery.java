@@ -1,5 +1,6 @@
-package halverson.c195;
+package halverson.c195.DAO;
 
+import halverson.c195.entities.AppointmentRow;
 import halverson.c195.helper.GetName;
 import halverson.c195.helper.JDBC;
 import halverson.c195.helper.TZConvert;

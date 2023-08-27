@@ -22,15 +22,15 @@ public class AppointmentsTable {
                                           TableColumn Col7, TableColumn Col8, TableColumn Col9,
                                           TableColumn Col10){
 
-        Col1.setText("Appointment ID");
-        Col1.setPrefWidth(106);
-        Col1.setMinWidth(106);
-        Col1.setMaxWidth(106);
+        Col1.setText("Appt ID");
+        Col1.setPrefWidth(50);
+        Col1.setMinWidth(50);
+        Col1.setMaxWidth(50);
 
         Col2.setText("Title");
-        Col2.setPrefWidth(84);
-        Col2.setMinWidth(84);
-        Col2.setMaxWidth(84);
+        Col2.setPrefWidth(150);
+        Col2.setMinWidth(150);
+        Col2.setMaxWidth(150);
 
         Col3.setText("Description");
         Col3.setPrefWidth(257);
@@ -38,29 +38,29 @@ public class AppointmentsTable {
         Col3.setMaxWidth(257);
 
         Col4.setText("Location");
-        Col4.setPrefWidth(135);
-        Col4.setMinWidth(135);
-        Col4.setMaxWidth(135);
+        Col4.setPrefWidth(170);
+        Col4.setMinWidth(170);
+        Col4.setMaxWidth(170);
 
         Col5.setText("Contact");
-        Col5.setPrefWidth(202);
-        Col5.setMinWidth(202);
-        Col5.setMaxWidth(202);
+        Col5.setPrefWidth(150);
+        Col5.setMinWidth(150);
+        Col5.setMaxWidth(160);
 
         Col6.setText("Type");
-        Col6.setPrefWidth(117);
-        Col6.setMinWidth(117);
-        Col6.setMaxWidth(117);
+        Col6.setPrefWidth(200);
+        Col6.setMinWidth(200);
+        Col6.setMaxWidth(200);
 
         Col7.setText("Start Date/Time");
-        Col7.setPrefWidth(252);
-        Col7.setMinWidth(252);
-        Col7.setMaxWidth(252);
+        Col7.setPrefWidth(200);
+        Col7.setMinWidth(200);
+        Col7.setMaxWidth(200);
 
         Col8.setText("End Date/Time");
-        Col8.setPrefWidth(248);
-        Col8.setMinWidth(248);
-        Col8.setMaxWidth(248);
+        Col8.setPrefWidth(200);
+        Col8.setMinWidth(200);
+        Col8.setMaxWidth(200);
 
         Col9.setText("Customer ID");
         Col9.setPrefWidth(105);

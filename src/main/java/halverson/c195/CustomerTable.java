@@ -45,27 +45,27 @@ public class CustomerTable {
         Col5.setMinWidth(180);
         Col5.setMaxWidth(180);
 
-        Col6.setText("Create Date");
-        Col6.setPrefWidth(260);
-        Col6.setMinWidth(260);
-        Col6.setMaxWidth(260);
+        Col6.setText("Country");
+        Col6.setPrefWidth(200);
+        Col6.setMinWidth(200);
+        Col6.setMaxWidth(200);
 
-        Col7.setText("Created By");
-        Col7.setPrefWidth(80);
-        Col7.setMinWidth(80);
-        Col7.setMaxWidth(80);
+        Col7.setText("State/Province");
+        Col7.setPrefWidth(150);
+        Col7.setMinWidth(150);
+        Col7.setMaxWidth(150);
 
-        Col8.setText("Last Update");
-        Col8.setPrefWidth(260);
-        Col8.setMinWidth(260);
-        Col8.setMaxWidth(260);
+        Col8.setText("");
+        Col8.setPrefWidth(200);
+        Col8.setMinWidth(200);
+        Col8.setMaxWidth(200);
 
-        Col9.setText("Last Updated By");
+        Col9.setText("");
         Col9.setPrefWidth(100);
         Col9.setMinWidth(100);
         Col9.setMaxWidth(100);
 
-        Col10.setText("State/Province");
+        Col10.setText("");
         Col10.setPrefWidth(160);
         Col10.setMinWidth(160);
         Col10.setMaxWidth(160);

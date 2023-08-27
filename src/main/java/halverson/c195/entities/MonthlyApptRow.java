@@ -1,4 +1,4 @@
-package halverson.c195;
+package halverson.c195.entities;
 
 import java.time.Month;
 

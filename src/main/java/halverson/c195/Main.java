@@ -1,6 +1,7 @@
 package halverson.c195;
 
 import halverson.c195.helper.JDBC;
+import halverson.c195.testing.AppointmentInHoursTest;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

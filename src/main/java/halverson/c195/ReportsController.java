@@ -1,9 +1,12 @@
 package halverson.c195;
 
+import halverson.c195.DAO.AppointmentsQuery;
+import halverson.c195.entities.AppointmentRow;
+import halverson.c195.entities.CountrySumRow;
+import halverson.c195.entities.MonthlyApptRow;
 import halverson.c195.helper.GetId;
 import halverson.c195.helper.GetName;
 import halverson.c195.helper.JDBC;
-import halverson.c195.helper.TZConvert;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -272,12 +275,12 @@ public class ReportsController implements Initializable {
     }
     /** This method populates the type combo box with unique types from the database options */
     private void typeComboBox(){
-        String planType = "Planning Session";
-        String briefType = "De-Briefing";
+        String stratType = "Business Strategy Session";
+        String modelType = "New Model Informational";
         String consultType = "Consultation";
 
-        TypeComboBox.getItems().add(planType);
-        TypeComboBox.getItems().add(briefType);
+        TypeComboBox.getItems().add(stratType);
+        TypeComboBox.getItems().add(modelType);
         TypeComboBox.getItems().add(consultType);
     }
 

@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="881.0" prefWidth="1644.0" style="-fx-background-color: f0f0f1;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.MainScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="881.0" prefWidth="1644.0" style="-fx-background-color: f1f1f0;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="halverson.c195.MainScreenController">
    <children>
       <Rectangle arcHeight="40.0" arcWidth="40.0" fill="WHITE" height="55.0" layoutX="671.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="302.0" />
       <Text layoutX="719.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Appointments">
@@ -54,14 +48,14 @@
       </RadioButton>
       <TableView fx:id="tableView" layoutX="18.0" layoutY="83.0" prefHeight="714.0" prefWidth="1607.0">
         <columns>
-          <TableColumn fx:id="Col1" prefWidth="106.0" text="Appointment ID" />
-          <TableColumn fx:id="Col2" prefWidth="84.0" text="Title" />
+          <TableColumn fx:id="Col1" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" text="Appt ID" />
+          <TableColumn fx:id="Col2" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Title" />
             <TableColumn fx:id="Col3" prefWidth="257.0" text="Description" />
-            <TableColumn fx:id="Col4" prefWidth="135.0" text="Location" />
-            <TableColumn fx:id="Col5" prefWidth="202.0" text="Contact" />
-            <TableColumn fx:id="Col6" prefWidth="117.0" text="Type" />
-            <TableColumn fx:id="Col7" prefWidth="252.0" text="Start Date/Time" />
-            <TableColumn fx:id="Col8" prefWidth="248.0" text="End Date/Time" />
+            <TableColumn fx:id="Col4" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" text="Location" />
+            <TableColumn fx:id="Col5" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" text="Contact" />
+            <TableColumn fx:id="Col6" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Type" />
+            <TableColumn fx:id="Col7" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Start Date/Time" />
+            <TableColumn fx:id="Col8" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="End Date/Time" />
             <TableColumn fx:id="Col9" prefWidth="105.0" text="Customer ID" />
             <TableColumn fx:id="Col10" prefWidth="99.0" text="User ID" />
         </columns>
@@ -71,5 +65,7 @@
             <Font name="Arial Black" size="14.0" />
          </font>
       </Text>
+      <TextArea fx:id="customerSearchBox" layoutX="1132.0" layoutY="33.0" onKeyPressed="#OnEnterSearch" prefHeight="38.0" prefWidth="166.0" promptText="Search Customers by Name" />
+      <Button fx:id="refreshCustomers" layoutX="991.0" layoutY="39.0" mnemonicParsing="false" onAction="#OnRefreshClick" text="Refresh Customers" />
    </children>
 </AnchorPane>

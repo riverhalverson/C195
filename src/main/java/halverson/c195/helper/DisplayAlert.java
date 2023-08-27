@@ -15,7 +15,7 @@ public class DisplayAlert {
         Alert invalidData = new Alert(Alert.AlertType.ERROR,
                 fieldName + " has no data entered");
 
-        Optional<ButtonType> cannotDeleteResult = invalidData.showAndWait();
+        Optional<ButtonType> alert = invalidData.showAndWait();
         return;
     }
     /** This method displays an alert with a custom message
@@ -25,7 +25,17 @@ public class DisplayAlert {
         Alert invalidData = new Alert(Alert.AlertType.ERROR,
                 errorMessage);
 
-        Optional<ButtonType> cannotDeleteResult = invalidData.showAndWait();
+        Optional<ButtonType> alert = invalidData.showAndWait();
+        return;
+    }
+    /** This method displays an alert with a custom message
+     * @param alertMessage the message to be displayed in the alert
+     */
+    public static void customAlert(String alertMessage){
+        Alert invalidData = new Alert(Alert.AlertType.INFORMATION,
+                alertMessage);
+
+        Optional<ButtonType> alert = invalidData.showAndWait();
         return;
     }
 }

@@ -1,11 +1,11 @@
 package halverson.c195;
 
+import halverson.c195.DAO.AppointmentsQuery;
 import halverson.c195.helper.DisplayAlert;
 import halverson.c195.helper.GetId;
 import halverson.c195.helper.JDBC;
 import halverson.c195.helper.TZConvert;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import halverson.c195.helper.ApptChecks;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,7 +22,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +38,7 @@ public class AddAppointmentController implements Initializable {
     public ComboBox CustomerIdBox;
     public ComboBox UserIdBox;
     public ComboBox TypeComboBox;
+    public DatePicker EndDatePicker;
 
     private LocalTime startTime;
     private LocalTime endTime;
@@ -86,12 +86,14 @@ public class AddAppointmentController implements Initializable {
             throw new RuntimeException("Type field cannot be blank");
         }
 
-        LocalDate datePicked = LocalDate.from(StartDatePicker.getValue().atStartOfDay());
-        LocalDateTime start = LocalDateTime.of(datePicked, startTime);
-        LocalDateTime end = LocalDateTime.of(datePicked, endTime);
+        LocalDate startDatePicked = LocalDate.from(StartDatePicker.getValue().atStartOfDay());
+        LocalDateTime start = LocalDateTime.of(startDatePicked, startTime);
 
-        boolean overlap = checkOverlap(start, end, customerId);
-        boolean duringHours = duringWorkingHours(start, end);
+        LocalDate endDatePicked = LocalDate.from(EndDatePicker.getValue().atStartOfDay());
+        LocalDateTime end = LocalDateTime.of(endDatePicked, endTime);
+
+        boolean overlap = ApptChecks.checkNewAptOverlap(start, end, customerId);
+        boolean duringHours = ApptChecks.duringWorkingHours(start, end);
 
         //checks if start time and after end time and vise versa
         if(end.isBefore(start) || start.isAfter(end)){
@@ -101,7 +103,7 @@ public class AddAppointmentController implements Initializable {
         else if (overlap) {
                 DisplayAlert.customError("Overlapping Appointment Times");
             } else if (!duringHours){
-            DisplayAlert.customError("Appointment out of Business Hours (8:00 a.m. to 10:00 p.m. EST");
+            DisplayAlert.customError("Appointment out of Business Hours (8:00 a.m. to 5:00 p.m. EST");
         }
         else {
             //convert to utc
@@ -184,12 +186,12 @@ public class AddAppointmentController implements Initializable {
 
     /** This method populates the type selection box */
     private void typeComboBox(){
-        String planType = "Planning Session";
-        String briefType = "De-Briefing";
+        String stratType = "Business Strategy Session";
+        String modelType = "New Model Informational";
         String consultType = "Consultation";
 
-        TypeComboBox.getItems().add(planType);
-        TypeComboBox.getItems().add(briefType);
+        TypeComboBox.getItems().add(stratType);
+        TypeComboBox.getItems().add(modelType);
         TypeComboBox.getItems().add(consultType);
     }
 
@@ -238,71 +240,7 @@ public class AddAppointmentController implements Initializable {
         endTime = (LocalTime) EndTimeComboBox.getValue();
     }
 
-    /** This method checks for apt time overlaps
-     * @param start the start apt time
-     * @param end the end apt time
-     * @param customerId the customer id to check overlaps for
-     * @return true or false if there is an overlap
-     */
-    public boolean checkOverlap(LocalDateTime start, LocalDateTime end, int customerId) throws SQLException {
-        boolean overlap = false;
 
-        String sql = "SELECT * FROM APPOINTMENTS WHERE Customer_ID = ?";
-
-        try{
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ps.setInt(1, customerId);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                LocalDateTime rStart = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime rEnd = rs.getTimestamp("End").toLocalDateTime();
-
-                //convert times to local
-                rStart = TZConvert.UTCToUser(rStart).toLocalDateTime();
-                rEnd = TZConvert.UTCToUser(rEnd).toLocalDateTime();
-
-                if((start.isAfter(rStart) || start.isEqual(rStart)) && (start.isBefore(rEnd)))
-                {
-                    return true;
-                } else if(end.isAfter(rEnd) && (end.isBefore(rEnd) || end.isEqual(rEnd)) )
-                {
-                    return true;
-                } else if((start.isBefore(rStart) || start.isEqual(rStart)) && (end.isAfter(rEnd) || end.isEqual(rEnd)))
-                {
-                    return true;
-                }
-            }
-        }
-        catch (SQLException ex){
-            ex.printStackTrace();
-        }
-        return overlap;
-    }
-
-    /** This method checks if an appt is during working hours
-     * @param start the start apt time
-     * @param end the end apt time
-     * @return true or false if outside hours
-     */
-    public boolean duringWorkingHours(LocalDateTime start, LocalDateTime end){
-        boolean withinHours;
-        LocalTime openHour = LocalTime.of(8,00);
-        LocalTime closeHour = LocalTime.of(22, 00);
-
-        //convert to eastern time
-        ZonedDateTime aptStartEST = TZConvert.UserToEST(LocalDateTime.from(start));
-        LocalTime aptStart = aptStartEST.toLocalTime();
-
-        ZonedDateTime aptEndEST = TZConvert.UserToEST((LocalDateTime.from(end)));
-        LocalTime aptEnd = aptEndEST.toLocalTime();
-
-        if(aptStart.isBefore(openHour) || aptEnd.isAfter(closeHour)){
-            withinHours = false;
-        }
-        else{
-            withinHours = true;
-        }
-
-        return withinHours;
+    public void EndDatePicked(ActionEvent actionEvent) {
     }
 }

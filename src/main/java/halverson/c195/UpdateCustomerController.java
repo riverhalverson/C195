@@ -1,5 +1,7 @@
 package halverson.c195;
 
+import halverson.c195.DAO.CustomerQuery;
+import halverson.c195.entities.CustomerRow;
 import halverson.c195.helper.GetId;
 import halverson.c195.helper.GetName;
 import halverson.c195.helper.JDBC;
@@ -15,7 +17,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;

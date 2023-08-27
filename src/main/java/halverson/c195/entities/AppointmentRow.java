@@ -1,4 +1,4 @@
-package halverson.c195;
+package halverson.c195.entities;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

@@ -1,4 +1,4 @@
-package halverson.c195;
+package halverson.c195.DAO;
 
 import halverson.c195.helper.JDBC;
 

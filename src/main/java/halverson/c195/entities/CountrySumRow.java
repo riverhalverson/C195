@@ -1,4 +1,4 @@
-package halverson.c195;
+package halverson.c195.entities;
 
 /** This method holds the row object for the reports page to display the sum of apts in each country */
 public class CountrySumRow {

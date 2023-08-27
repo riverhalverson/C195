@@ -1,8 +1,10 @@
 package halverson.c195;
 
+import halverson.c195.DAO.AppointmentsQuery;
+import halverson.c195.DAO.CustomerQuery;
+import halverson.c195.entities.AppointmentRow;
+import halverson.c195.entities.CustomerRow;
 import halverson.c195.helper.*;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -25,8 +29,6 @@ import java.sql.Statement;
 import java.time.*;
 import java.time.temporal.WeekFields;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 /** This class is the controller for the main screen of the application */
 public class MainScreenController implements Initializable {
@@ -54,6 +56,8 @@ public class MainScreenController implements Initializable {
 
     private static CustomerRow customer = null;
     private static AppointmentRow appointment = null;
+    public TextArea customerSearchBox;
+    public Button refreshCustomers;
 
     /** This method exits the user out of the application
      * @param actionEvent the exit button is clicked
@@ -83,6 +87,9 @@ public class MainScreenController implements Initializable {
         UpdateButton.setText("Update Customer");
         DeleteButton.setText("Delete Customer");
         customerSelected = true;
+        customerSearchBox.setDisable(false);
+        customerSearchBox.setVisible(true);
+        refreshCustomers.setVisible(true);
 
 
         CustomerTable.setupCustomerTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
@@ -96,6 +103,9 @@ public class MainScreenController implements Initializable {
         UpdateButton.setText("Update Appointment");
         DeleteButton.setText("Delete Appointment");
         customerSelected = false;
+        customerSearchBox.setDisable(true);
+        customerSearchBox.setVisible(false);
+        refreshCustomers.setVisible(false);
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTableWeek();
@@ -108,6 +118,9 @@ public class MainScreenController implements Initializable {
         UpdateButton.setText("Update Appointment");
         DeleteButton.setText("Delete Appointment");
         customerSelected = false;
+        customerSearchBox.setDisable(true);
+        customerSearchBox.setVisible(false);
+        refreshCustomers.setVisible(false);
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTableMonth();
@@ -120,6 +133,9 @@ public class MainScreenController implements Initializable {
         UpdateButton.setText("Update Appointment");
         DeleteButton.setText("Delete Appointment");
         customerSelected = false;
+        customerSearchBox.setDisable(true);
+        customerSearchBox.setVisible(false);
+        refreshCustomers.setVisible(false);
 
         AppointmentsTable.setupAppointmentsTable(Col1,Col2,Col3,Col4,Col5,Col6,Col7,Col8,Col9,Col10);
         populateAppointmentTable();
@@ -174,13 +190,22 @@ public class MainScreenController implements Initializable {
 
                 //if ok is selected, remove part
                 if (choiceResult.isPresent() && choiceResult.get() == ButtonType.OK) {
+                    //deletes associated appointments
+                    String sql = "DELETE FROM APPOINTMENTS WHERE Customer_ID = ?";
+                    PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+                    ps.setInt(1, customer.getCustomerid());
+
+                    int appointmentsDeleted = ps.executeUpdate();
+                    System.out.println(appointmentsDeleted + " associated appointments deleted");
+
+
                     int customerid = customer.getCustomerid();
                     String customerName = customer.getCustomerName();
 
                     rowsAffected = CustomerQuery.deleteCustomer(customerid);
                 }
 
-                DisplayAlert.customError(name + " was deleted successfully");
+                DisplayAlert.customAlert(name + " was deleted successfully");
 
                 //reloads customer table to show updates
                 populateCustomerTable();
@@ -211,11 +236,11 @@ public class MainScreenController implements Initializable {
                     rowsAffected = AppointmentsQuery.deleteAppointment(appointmentid);
                 }
                 if(rowsAffected == 0){
-                    DisplayAlert.customError(type + " appointment with ID of " + aptId +
+                    DisplayAlert.customAlert(type + " appointment with ID of " + aptId +
                             " was not deleted successfully");
                 }
                 else{
-                    DisplayAlert.customError(type+ " appointment with ID of " + aptId +
+                    DisplayAlert.customAlert(type+ " appointment with ID of " + aptId +
                             " was deleted successfully");
 
                     //reloads customer table to show updates
@@ -306,20 +331,17 @@ public class MainScreenController implements Initializable {
                 String address = rs.getString("Address");
                 String postalCode = rs.getString("Postal_Code");
                 String phoneNumber = rs.getString("Phone");
-                String createDate = rs.getString("Create_Date");
-                String createdBy = rs.getString("Created_By");
-                String lastUpdate = rs.getString("Last_Update");
-                String lastUpdatedBy = rs.getString("Last_Updated_By");
+
 
                 int divisionId = rs.getInt("Division_ID");
                 String division = GetName.getDivisionName(divisionId);
 
+                String country = GetName.getCountry(divisionId);
+
                 CustomerRow cr = new CustomerRow( customerid,
                         customerName, address,
                         postalCode, phoneNumber,
-                        createDate, createdBy,
-                        lastUpdate, lastUpdatedBy,
-                        division);
+                        country, division);
                 customerList.add(cr);
             }
 
@@ -334,11 +356,12 @@ public class MainScreenController implements Initializable {
         Col3.setCellValueFactory(new PropertyValueFactory<>("address"));
         Col4.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         Col5.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        Col6.setCellValueFactory(new PropertyValueFactory<>("createDate"));
-        Col7.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
-        Col8.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
-        Col9.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
-        Col10.setCellValueFactory(new PropertyValueFactory<>("division"));
+        Col6.setCellValueFactory(new PropertyValueFactory<>("country"));
+        Col7.setCellValueFactory(new PropertyValueFactory<>("division"));
+        Col8.setCellValueFactory(new PropertyValueFactory<>(""));
+        Col9.setCellValueFactory(new PropertyValueFactory<>(""));
+        Col10.setCellValueFactory(new PropertyValueFactory<>(""));
+
     }
     /** This method populates the appointment table from the database */
     public void populateAppointmentTable(){
@@ -502,8 +525,69 @@ public class MainScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerSelected = false;
+        customerSearchBox.setDisable(true);
+        customerSearchBox.setVisible(false);
+        refreshCustomers.setVisible(false);
+
         populateAppointmentTable();
 
         updateTimeZoneLabel.run();
+    }
+
+    public void OnEnterSearch(KeyEvent keyEvent) {
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            tableView.getItems().clear();
+            String searchFor = customerSearchBox.getText();
+            searchFor = searchFor.replaceAll("[\n\r]", "");
+
+            ObservableList<CustomerRow> matchingCustomers = FXCollections.observableArrayList();
+            ObservableList<CustomerRow> allCustomers = FXCollections.observableArrayList();
+
+            //get all current customers
+            ResultSet rs = null;
+            Statement stmt;
+            String sql = "SELECT * FROM CUSTOMERS";
+
+            try{
+                stmt = JDBC.connection.createStatement();
+                rs = stmt.executeQuery(sql);
+                while(rs.next()){
+                    int customerid = rs.getInt("Customer_ID");
+                    String customerName = rs.getString("Customer_Name");
+                    String address = rs.getString("Address");
+                    String postalCode = rs.getString("Postal_Code");
+                    String phoneNumber = rs.getString("Phone");
+
+
+                    int divisionId = rs.getInt("Division_ID");
+                    String division = GetName.getDivisionName(divisionId);
+
+                    String country = GetName.getCountry(divisionId);
+
+                    CustomerRow cr = new CustomerRow( customerid,
+                            customerName, address,
+                            postalCode, phoneNumber,
+                            country, division);
+                    allCustomers.add(cr);
+                }
+
+            }catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+            for(CustomerRow customer : allCustomers){
+                String customerName = customer.getCustomerName();
+                if(customerName.contains(searchFor)){
+                    matchingCustomers.add(customer);
+                }
+            }
+            tableView.setItems(matchingCustomers);
+
+            customerSearchBox.setText("");
+        }
+    }
+
+    public void OnRefreshClick(ActionEvent actionEvent) {
+        populateCustomerTable();
     }
 }
